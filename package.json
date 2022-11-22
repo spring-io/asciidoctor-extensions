@@ -1,0 +1,70 @@
+{
+  "name": "@springio/asciidoctor-extensions",
+  "version": "1.0.0-alpha.0",
+  "description": "Asciidoctor extensions that support the Spring documentation.",
+  "license": "ASL-2.0",
+  "author": "OpenDevise Inc. (https://opendevise.com)",
+  "contributors": [
+    "Dan Allen <dan@opendevise.com>",
+    "Sarah White <sarah@opendevise.com>",
+    "Phil Webb <pwebb@vmware.com>",
+    "Andy Wilkinson"
+  ],
+  "repository": "github:opendevise/spring-asciidoctor-extensions",
+  "bugs": {
+    "url": "https://github.com/opendevise/spring-asciidoctor-extensions/issues"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "coverage": "nyc _mocha",
+    "build": "npm test && npm run lint",
+    "format": "node npm/format.js lib,test,npm",
+    "lint": "eslint \"{lib,test,npm}/**/*.js\"",
+    "prepublishOnly": "npx -y downdoc --prepublish",
+    "postpublish": "npx -y downdoc --postpublish",
+    "test": "_mocha",
+    "version": "node npm/version.js"
+  },
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./antora-migrate-tabs-extension": "./lib/antora-migrate-tabs-extension.js"
+  },
+  "imports": {
+    "#package": "./package.json"
+  },
+  "files": [
+    "lib"
+  ],
+  "keywords": [
+    "asciidoc",
+    "asciidoctor",
+    "extension"
+  ],
+  "devDependencies": {
+    "chai": "~4.3",
+    "chai-fs": "~2.0",
+    "chai-spies": "~1.0",
+    "dirty-chai": "~2.0",
+    "eslint": "~8.27",
+    "eslint-config-standard": "~17.0",
+    "mocha": "~10.1",
+    "nyc": "~15.1",
+    "prettier-eslint": "~15.0"
+  },
+  "nyc": {
+    "cache": true,
+    "cacheDir": "node_modules/.cache/nyc",
+    "include": [
+      "lib/*.js"
+    ],
+    "reporter": [
+      "cobertura",
+      "lcov",
+      "text"
+    ],
+    "reportDir": "reports"
+  }
+}
