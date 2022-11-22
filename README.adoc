@@ -1,0 +1,15 @@
+= Spring Asciidoctor Extensions
+ifdef::env-github[]
+:toc: preamble
+:toc-title: Contents
+:toclevels: 1
+endif::[]
+
+This repository contains Asciidoctor extensions that support the Spring documentation.
+For now, these extensions are only designed for use with Asciidoctor.js.
+The extensions evolved out of the https://github.com/spring-io/spring-asciidoctor-backends[Spring Asciidoctor backends] project.
+
+== License
+
+Use of this software is granted under the terms of the https://www.apache.org/licenses/LICENSE-2.0[Apache License, Version 2.0] (Apache-2.0).
+ifdef::env-github[See link:LICENSE[] to find the full license text.]
