@@ -278,6 +278,31 @@ describe('code-chomping-extension', () => {
       expect(actual).to.equal(expected)
     })
 
+    it('should remove line marked with @chomp:line', () => {
+      const input = heredoc`
+        [,java]
+        ----
+        @SpringBootApplication
+        public class SampleApplication implements CommandLineRunner {
+            @Override // @chomp:line
+            public void run(String... args) {
+                System.out.println("Let's go!");
+            }
+        }
+        ----
+      `
+      const expected = heredoc`
+        @SpringBootApplication
+        public class SampleApplication implements CommandLineRunner {
+            public void run(String... args) {
+                System.out.println("Let's go!");
+            }
+        }
+      `
+      const actual = run(input).getBlocks()[0].getSource()
+      expect(actual).to.equal(expected)
+    })
+
     it('should remove lines with @Suppress or @SuppressWarnings annotation', () => {
       const input = heredoc`
         [,java]

@@ -70,6 +70,7 @@ describe('extensions', () => {
           @Bean
           public Servlet dispatcherServlet() {
             return new GenericServlet() {
+              @Override // @chomp:line
               public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
                 res.setContentType("text/plain");
                 // @formatter:off
@@ -81,6 +82,7 @@ describe('extensions', () => {
             };
           }
 
+          @Override // @chomp:line
           protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
             return application.sources(SampleServletApplication.class);
           }

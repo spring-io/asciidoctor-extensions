@@ -36,8 +36,11 @@ The following chomp tags (i.e., comments) are supported:
 |/* @chomp:line <replacement> */
 |Chomps the rest of the line and replaces it with <replacement>, which defaults to +...+
 
+|// @chomp:line
+|Chomps (drops) this line only
+
 |// @chomp:file
-|Chomps this line to the end of the file
+|Chomps (drops) this line to the end of the file
 |===
 
 Here's an example source block that uses code chomping:
