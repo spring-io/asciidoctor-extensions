@@ -8,12 +8,12 @@ const { name: packageName } = require('#package')
 describe('code-folding-extension', () => {
   const ext = require(packageName + '/code-folding-extension')
 
+  const filterLines = (str, predicate) => str.split('\n').filter(predicate).join('\n')
+
   const run = (input = [], opts = {}) => {
     opts.extension_registry = ext.register(opts.extension_registry || Asciidoctor.Extensions.create())
     return Asciidoctor.load(input, opts)
   }
-
-  const filterLines = (str, predicate) => str.split('\n').filter(predicate).join('\n')
 
   describe('bootstrap', () => {
     it('should be able to require extension', () => {
@@ -67,7 +67,7 @@ describe('code-folding-extension', () => {
       ----
       `
 
-      const expected = filterLines(code, (l) => !~l.indexOf('// @fold:'))
+      const expected = filterLines(code, (l) => !l.includes('// @fold:'))
       const actual = run(input).getBlocks()[0].getSource()
       expect(actual).to.equal(expected)
     })
@@ -92,7 +92,7 @@ describe('code-folding-extension', () => {
       ----
       `
 
-      const expected = filterLines(code, (l) => !~l.indexOf('// @fold:'))
+      const expected = filterLines(code, (l) => !l.includes('// @fold:'))
       const actual = run(input).getBlocks()[0].getSource()
       expect(actual).to.equal(expected)
     })
@@ -119,7 +119,7 @@ describe('code-folding-extension', () => {
       ----
       `
 
-      const expected = filterLines(code, (l) => !~l.indexOf('// @fold:'))
+      const expected = filterLines(code, (l) => !l.includes('// @fold:'))
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
     })

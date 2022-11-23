@@ -8,6 +8,8 @@ const { name: packageName } = require('#package')
 describe('code-chomping-extension', () => {
   const ext = require(packageName + '/code-chomping-extension')
 
+  const filterLines = (str, predicate) => str.split('\n').filter(predicate).join('\n')
+
   const run = (input = [], opts = {}) => {
     opts.extension_registry = ext.register(opts.extension_registry || Asciidoctor.Extensions.create())
     return Asciidoctor.load(input, opts)
@@ -42,13 +44,18 @@ describe('code-chomping-extension', () => {
 
   describe('chomp code', () => {
     it('should not operate on listing block', () => {
-      const input = heredoc`
-      ----
+      const code = heredoc`
       keep
       // @chomp:line
       also keep
+      `
+
+      const input = heredoc`
+      ----
+      ${code}
       ----
       `
+
       const extensionRegistry = Asciidoctor.Extensions.create()
       extensionRegistry.treeProcessor(function () {
         this.process((doc) => {
@@ -56,7 +63,7 @@ describe('code-chomping-extension', () => {
           listingBlock.getAttribute = spy(listingBlock.getAttribute)
         })
       })
-      const expected = input.split('\n').slice(1, -1).join('\n')
+      const expected = code
       const block = run(input, { extension_registry: extensionRegistry }).getBlocks()[0]
       const actual = block.getSource()
       expect(actual).to.equal(expected)
@@ -64,14 +71,19 @@ describe('code-chomping-extension', () => {
     })
 
     it('should not operate on non-Java-like source block', () => {
-      const input = heredoc`
-      [,ruby]
-      ----
+      const code = heredoc`
       keep
       // @chomp:line
       also keep
+      `
+
+      const input = heredoc`
+      [,ruby]
+      ----
+      ${code}
       ----
       `
+
       const extensionRegistry = Asciidoctor.Extensions.create()
       extensionRegistry.treeProcessor(function () {
         this.process((doc) => {
@@ -79,7 +91,7 @@ describe('code-chomping-extension', () => {
           listingBlock.getAttribute = spy(listingBlock.getAttribute)
         })
       })
-      const expected = input.split('\n').slice(2, -1).join('\n')
+      const expected = code
       const block = run(input, { extension_registry: extensionRegistry }).getBlocks()[0]
       const actual = block.getSource()
       expect(actual).to.equal(expected)
@@ -87,11 +99,7 @@ describe('code-chomping-extension', () => {
     })
 
     it('should remove header above package declaration (Java)', () => {
-      const input = heredoc`
-      :chomp: headers
-
-      [,java]
-      ----
+      const code = heredoc`
       /*
        * Copyright 2000-present ACME Corp. Free the source!
        */
@@ -99,70 +107,75 @@ describe('code-chomping-extension', () => {
       package org.example;
 
       public class Example {}
+      `
+
+      const input = heredoc`
+      :chomp: headers
+
+      [,java]
+      ----
+      ${code}
       ----
       `
-      const expected = heredoc`
-      package org.example;
 
-      public class Example {}
-      `
+      const expected = code.replace(/.*?(?=package )/s, '')
       const actual = run(input).getBlocks()[0].getSource()
       expect(actual).to.equal(expected)
     })
 
     it('should remove header above package declaration (Kotlin)', () => {
+      const code = heredoc`
+      /*
+       * Copyright 2000-present ACME Corp. Free the source!
+       */
+
+      package org.example
+
+      public class Example {}
+      `
+
       const input = heredoc`
       :chomp-package-replacement:
       :chomp: all
 
       [,kt]
       ----
-      /*
-       * Copyright 2000-present ACME Corp. Free the source!
-       */
-
-      package org.example
-
-      public class Example {}
+      ${code}
       ----
       `
-      const expected = heredoc`
-      package org.example
 
-      public class Example {}
-      `
+      const expected = code.replace(/.*?(?=package )/s, '')
       const actual = run(input).getBlocks()[0].getSource()
       expect(actual).to.equal(expected)
     })
 
     it('should remove header above package declaration (Groovy)', () => {
+      const code = heredoc`
+      /*
+       * Copyright 2000-present ACME Corp. Free the source!
+       */
+
+      package org.example
+
+      public class Example {}
+      `
+
       const input = heredoc`
       :chomp-package-replacement:
 
       [,groovy,chomp=all]
       ----
-      /*
-       * Copyright 2000-present ACME Corp. Free the source!
-       */
-
-      package org.example
-
-      public class Example {}
+      ${code}
       ----
       `
-      const expected = heredoc`
-      package org.example
 
-      public class Example {}
-      `
+      const expected = code.replace(/.*?(?=package )/s, '')
       const actual = run(input).getBlocks()[0].getSource()
       expect(actual).to.equal(expected)
     })
 
     it('should not remove lines above subsequent package declaration', () => {
-      const input = heredoc`
-      [,groovy]
-      ----
+      const code = heredoc`
       /*
        * Copyright 2000-present ACME Corp. Free the source!
        */
@@ -174,17 +187,16 @@ describe('code-chomping-extension', () => {
       package com.acme
 
       public class Thing {}
+      `
+
+      const input = heredoc`
+      [,groovy]
+      ----
+      ${code}
       ----
       `
-      const expected = heredoc`
-      package org.example
 
-      public class Example {}
-
-      package com.acme
-
-      public class Thing {}
-      `
+      const expected = code.replace(/.*?(?=package )/s, '')
       const actual = run(input, { attributes: { 'chomp@': 'headers' } })
         .getBlocks()[0]
         .getSource()
@@ -202,48 +214,51 @@ describe('code-chomping-extension', () => {
       public class Example {}
       ----
       `
+
       const expected = 'public class Example {}'
       const actual = run(input).getBlocks()[0].getSource()
       expect(actual).to.equal(expected)
     })
 
     it('should replace package declaration with statement terminator at top of block', () => {
+      const code = heredoc`
+      package org.example;
+
+      public class Example {}
+      `
+
       const input = heredoc`
       :chomp: packages
       :chomp_package_replacement: com.acme
 
       [,java]
       ----
-      package org.example;
-
-      public class Example {}
+      ${code}
       ----
       `
-      const expected = heredoc`
-      package com.acme;
 
-      public class Example {}
-      `
+      const expected = code.replace('package org.example', 'package com.acme')
       const actual = run(input).getBlocks()[0].getSource()
       expect(actual).to.equal(expected)
     })
 
     it('should replace package declaration without statement terminator', () => {
+      const code = heredoc`
+      package org.example
+
+      public class Example {}
+      `
+
       const input = heredoc`
       :chomp-package-replacement: com.acme
 
       [,groovy,chomp=packages]
       ----
-      package org.example
-
-      public class Example {}
+      ${code}
       ----
       `
-      const expected = heredoc`
-      package com.acme
 
-      public class Example {}
-      `
+      const expected = code.replace('package org.example', 'package com.acme')
       const actual = run(input).getBlocks()[0].getSource()
       expect(actual).to.equal(expected)
     })
@@ -258,6 +273,7 @@ describe('code-chomping-extension', () => {
       public class Example {}
       ----
       `
+
       const expected = 'package org.example;'
       const actual = run(input).getBlocks()[0].getSource()
       expect(actual).to.equal(expected)
@@ -273,15 +289,14 @@ describe('code-chomping-extension', () => {
       public class Example {}
       ----
       `
+
       const expected = 'package org.example;'
       const actual = run(input).getBlocks()[0].getSource()
       expect(actual).to.equal(expected)
     })
 
     it('should remove line marked with @chomp:line', () => {
-      const input = heredoc`
-      [,java]
-      ----
+      const code = heredoc`
       @SpringBootApplication
       public class SampleApplication implements CommandLineRunner {
           @Override // @chomp:line
@@ -289,24 +304,22 @@ describe('code-chomping-extension', () => {
               System.out.println("Let's go!");
           }
       }
+      `
+
+      const input = heredoc`
+      [,java]
+      ----
+      ${code}
       ----
       `
-      const expected = heredoc`
-      @SpringBootApplication
-      public class SampleApplication implements CommandLineRunner {
-          public void run(String... args) {
-              System.out.println("Let's go!");
-          }
-      }
-      `
+
+      const expected = filterLines(code, (l) => !l.endsWith('// @chomp:line'))
       const actual = run(input).getBlocks()[0].getSource()
       expect(actual).to.equal(expected)
     })
 
     it('should remove lines with @Suppress or @SuppressWarnings annotation', () => {
-      const input = heredoc`
-      [,java]
-      ----
+      const code = heredoc`
       public class Person {
         @SuppressWarnings("unused")
         private String name;
@@ -314,23 +327,22 @@ describe('code-chomping-extension', () => {
         @Suppress("unused")
         private String role;
       }
+      `
+
+      const input = heredoc`
+      [,java]
+      ----
+      ${code}
       ----
       `
-      const expected = heredoc`
-      public class Person {
-        private String name;
 
-        private String role;
-      }
-      `
+      const expected = filterLines(code, (l) => !l.includes('@Suppress'))
       const actual = run(input).getBlocks()[0].getSource()
       expect(actual).to.equal(expected)
     })
 
     it('should remove lines with @formatter directives', () => {
-      const input = heredoc`
-      [,java]
-      ----
+      const code = heredoc`
       public class WebFluxRedisApplication {
         @Bean
         public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
@@ -347,24 +359,16 @@ describe('code-chomping-extension', () => {
           // @formatter:on
         }
       }
+      `
+
+      const input = heredoc`
+      [,java]
+      ----
+      ${code}
       ----
       `
-      const expected = heredoc`
-      public class WebFluxRedisApplication {
-        @Bean
-        public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-          return http
-            .authorizeExchange()
-              .anyExchange().authenticated()
-              .and()
-            .httpBasic().securityContextRepository(new WebSessionServerSecurityContextRepository())
-              .and()
-            .formLogin()
-              .and()
-            .build();
-        }
-      }
-      `
+
+      const expected = filterLines(code, (l) => !l.includes('// @formatter:'))
       const actual = run(input).getBlocks()[0].getSource()
       expect(actual).to.equal(expected)
     })
@@ -382,6 +386,7 @@ describe('code-chomping-extension', () => {
       }
       ----
       `
+
       const expected = heredoc`
       public class Example {
         private final Something something;
@@ -391,6 +396,7 @@ describe('code-chomping-extension', () => {
         }
       }
       `
+
       const actual = run(input).getBlocks()[0].getSource()
       expect(actual).to.equal(expected)
     })
@@ -408,6 +414,7 @@ describe('code-chomping-extension', () => {
       }
       ----
       `
+
       const expected = heredoc`
       public class Example {
         private final Something something;
@@ -417,6 +424,7 @@ describe('code-chomping-extension', () => {
         }
       }
       `
+
       const actual = run(input).getBlocks()[0].getSource()
       expect(actual).to.equal(expected)
     })
@@ -432,6 +440,7 @@ describe('code-chomping-extension', () => {
       }
       ----
       `
+
       const expected = heredoc`
       public class Example {
         public static void main(String[] args) {
@@ -439,6 +448,7 @@ describe('code-chomping-extension', () => {
         }
       }
       `
+
       const actual = run(input).getBlocks()[0].getSource()
       expect(actual).to.equal(expected)
     })
