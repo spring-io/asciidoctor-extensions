@@ -15,8 +15,22 @@ chai.use(require('dirty-chai'))
 const cleanDir = (dir, { create } = {}) =>
   fsp.rm(dir, { recursive: true, force: true }).then(() => (create ? fsp.mkdir(dir, { recursive: true }) : undefined))
 
-const heredoc = (literals) => {
-  const str = literals[0].trimEnd()
+const heredoc = (literals, ...vals) => {
+  const str = literals
+    .reduce((accum, chunk, idx) => {
+      if (!idx) return [chunk]
+      let val = vals[idx - 1]
+      let match
+      const last = accum[accum.length - 1]
+      if (last.charAt(last.length - 1) === ' ' && (match = /\n( +)$/.exec(last))) {
+        const indent = match[1]
+        const valLines = val.split(/^/m)
+        if (valLines.length > 1) val = valLines.map((l, i) => (i ? indent + l : l)).join('')
+      }
+      return accum.concat(val, chunk)
+    }, undefined)
+    .join('')
+    .trimEnd()
   let lines = str.split(/^/m)
   if (lines[0] === '\n') lines = lines.slice(1)
   if (lines.length < 2) return str // discourage use of heredoc in this case
