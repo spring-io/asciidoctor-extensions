@@ -124,6 +124,98 @@ The following document is configured to update the name in the package declarati
 
 If this attribute is set and its value is empty, the original package declaration is preserved.
 
+=== Code Folding
+
+*require name:* @springio/asciidoctor-extensions/code-folding-extension
+
+The code folding extension allows non-pertinent code in a source block to be hidden on initial view.
+The user can click the "`unfold`" button to reveal the hidden code.
+The extension will not run on any other source, listing, or literal blocks.
+This extension is mainly useful if you have externalized code that includes boilerplate lines that detract from the focus of the snippet.
+
+When this extension is registered, all Java imports will be automatically folded.
+Additional fold blocks can also be defined using fold tags.
+The fold tags are `@fold:on` and `@fold:off` comment lines.
+
+Here's an example source block that uses code folding to hide the fields on initial view:
+
+[source,asciidoc]
+....
+[,java]
+----
+public class Example {
+    // @fold:on
+    private final String first;
+
+    private final String second;
+    // @fold:off
+
+    public Example(String first, String second) {
+        this.first = first;
+        this.second = second;
+    }
+}
+----
+....
+
+The `@fold:on` tag supports replacement text to show when the block is folded.
+Here's an example source block that replaces the getters and setters with a comment when folded:
+
+[source,asciidoc]
+....
+[,java]
+----
+public class Example {
+    private String first;
+
+    private String second;
+
+    // @fold:on // getters / setters...
+    public String getFirst() {
+        return this.first;
+    }
+
+    public void setFirst(String first) {
+        this.first = first;
+    }
+
+    public String getSecond() {
+        return this.second;
+    }
+
+    public void setSecond(String second) {
+        this.second = second;
+    }
+    // @fold:off
+}
+----
+....
+
+You can set the `fold` AsciiDoc attribute to change the default settings.
+The attribute can be used on the document or the block.
+The document attribute is the default value.
+The attribute value may be one of the following keywords:
+
+[%autowidth,cols=~m;~]
+|===
+|Flag |Description
+
+|default
+|Enable the `imports` and `tags` operations
+
+|all
+|Enable all folding operations
+
+|none
+|Disable all folding operations
+
+|imports
+|Fold import statements
+
+|tags
+|Fold `@fold:on` / `@fold:off` tags
+|===
+
 == License
 
 Use of this software is granted under the terms of the https://www.apache.org/licenses/LICENSE-2.0[Apache License, Version 2.0] (Apache-2.0).

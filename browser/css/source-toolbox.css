@@ -1,0 +1,138 @@
+.doc pre.highlight {
+  position: relative;
+}
+
+.doc pre code[data-lang]::before {
+  color: var(--pre-border-color);
+  content: attr(data-lang);
+  display: block;
+  font-size: 0.75em;
+  line-height: 1;
+  position: absolute;
+  right: 0.5rem;
+  top: 0.25rem;
+  text-transform: uppercase;
+}
+
+.doc pre code .fold-block {
+  clear: left;
+  display: block;
+  float: left;
+  overflow-y: hidden;
+}
+
+@supports (overflow: clip) {
+  .doc pre code .fold-block {
+    clear: none;
+    float: none;
+    overflow-y: clip;
+  }
+}
+
+.doc pre code:not(.unfolded) .hide-when-folded,
+.doc pre code.unfolded .hide-when-unfolded {
+  max-height: 0;
+  opacity: 0;
+}
+
+/* NOTE these transition timings must be modified extremely carefully to ensure a smooth transition */
+.doc pre code:not(.unfolded) .hide-when-folded {
+  transition: max-height 300ms ease-in-out, opacity 100ms linear;
+}
+
+.doc pre code.unfolded .hide-when-folded {
+  transition: max-height 200ms ease, opacity 100ms linear 200ms;
+}
+
+.doc pre code:not(.unfolded) .hide-when-unfolded {
+  transition: max-height 200ms ease, opacity 100ms linear 225ms;
+}
+
+.doc pre code.unfolded .hide-when-unfolded {
+  transition: max-height 300ms ease-out, opacity 100ms linear;
+}
+
+.doc pre code .scratch-block .fold-block {
+  max-height: none;
+  transition: none;
+}
+
+.doc .source-toolbox {
+  background-color: var(--body-background-color);
+  border: 1px solid var(--pre-border-color);
+  border-radius: 2px;
+  bottom: 0.5rem;
+  display: flex;
+  font-family: var(--body-font-family);
+  line-height: 1;
+  opacity: 0;
+  position: absolute;
+  right: 0.5rem;
+  transition: opacity 0.15s ease-in-out;
+  z-index: 1;
+}
+
+.doc pre.highlight:hover .source-toolbox {
+  opacity: 1;
+}
+
+.doc .source-toolbox > :not(:last-child) {
+  border-right: 1px solid var(--pre-border-color);
+}
+
+.doc .source-toolbox button {
+  background: none no-repeat center / 16px 16px;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  font-size: inherit;
+  line-height: inherit;
+  width: 24px;
+  height: 24px;
+}
+
+.doc .source-toolbox .copy-button {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.doc .source-toolbox .copy-toast {
+  flex: none;
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  margin-top: 1em;
+  top: 100%;
+  background-color: var(--body-font-color);
+  border-radius: 0.25em;
+  padding: 0.5em;
+  color: #fff;
+  cursor: auto;
+  opacity: 0;
+  transition: opacity 0.5s ease 0.75s;
+  white-space: nowrap;
+}
+
+.doc .source-toolbox .copy-toast::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 1em;
+  height: 1em;
+  border: 0.55em solid transparent;
+  border-left-color: var(--body-font-color);
+  transform: rotate(-90deg) translateX(50%) translateY(50%);
+  transform-origin: left;
+}
+
+.doc .source-toolbox .copy-button.clicked .copy-toast {
+  opacity: 1;
+  transition: none;
+}
+
+.doc .language-console .hljs-meta {
+  user-select: none;
+}
