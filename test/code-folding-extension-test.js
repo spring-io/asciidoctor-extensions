@@ -139,9 +139,7 @@ describe('code-folding-extension', () => {
       run(input)
         .getBlocks()
         .map((it) => it.getContent())
-        .forEach((actual) => {
-          expect(actual['$nil?']()).to.be.true()
-        })
+        .forEach((actual) => expect(actual['$nil?']()).to.be.true())
     })
 
     it('should not wrap contents of block in fold span if no directives are found', () => {
