@@ -15,7 +15,6 @@ describe('code-folding-extension', () => {
 
   describe('bootstrap', () => {
     it('should be able to require extension', () => {
-      console.log(packageName)
       expect(ext).to.be.instanceOf(Object)
       expect(ext.register).to.be.instanceOf(Function)
     })
@@ -431,7 +430,7 @@ describe('code-folding-extension', () => {
       const input = heredoc`
         [,java]
         ----
-        /**
+        /*
          * License header
          */
         package org.example;
