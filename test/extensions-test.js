@@ -43,7 +43,6 @@ describe('extensions', () => {
     it('should chomp source and add fold blocks to converted content', () => {
       const input = heredoc`
         :chomp: all
-        :chomp-package-replacement: com.mydomain
         :fold: all
 
         [,java]
@@ -96,8 +95,6 @@ describe('extensions', () => {
         ----
       `
       const expectedSource = heredoc`
-        package com.mydomain;
-
         import java.io.IOException;
 
         import jakarta.servlet.*;
@@ -135,9 +132,7 @@ describe('extensions', () => {
         }
       `
       const expectedContent = heredoc`
-        <span class="fold-block">package com.mydomain;
-
-        </span><span class="fold-block hide-when-folded">import java.io.IOException;
+        <span class="fold-block hide-when-folded">import java.io.IOException;
 
         import jakarta.servlet.*;
 
