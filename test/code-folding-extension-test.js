@@ -447,7 +447,7 @@ describe('code-folding-extension', () => {
         ----
       `
       const expected = heredoc`
-        <span class="fold-block">/**
+        <span class="fold-block">/*
          * License header
          */
         package org.example;

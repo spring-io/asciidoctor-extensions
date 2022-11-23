@@ -352,7 +352,7 @@ describe('code-chomping-extension', () => {
           private final Something something;
 
           public Example() {
-            this.something = /**/ new MockSomething();
+            this.something = /**/new MockSomething();
           }
         }
         ----
@@ -378,7 +378,7 @@ describe('code-chomping-extension', () => {
           private final Something something;
 
           public Example() {
-            this.something = /* @chomp:line ...your thing */new MyThing();
+            this.something = /* @chomp:line ...your thing */ new MyThing();
           }
         }
         ----
@@ -389,6 +389,28 @@ describe('code-chomping-extension', () => {
 
           public Example() {
             this.something = ...your thing
+          }
+        }
+      `
+      const actual = run(input).getBlocks()[0].getSource()
+      expect(actual).to.equal(expected)
+    })
+
+    it('should not require space before chomp tag', () => {
+      const input = heredoc`
+        [,java]
+        ----
+        public class Example {
+          public static void main(String[] args) {
+            System.out.println(/* @chomp:line "your message"); */"Hello, World!");
+          }
+        }
+        ----
+      `
+      const expected = heredoc`
+        public class Example {
+          public static void main(String[] args) {
+            System.out.println("your message");
           }
         }
       `

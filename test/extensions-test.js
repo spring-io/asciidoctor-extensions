@@ -40,7 +40,7 @@ describe('extensions', () => {
   })
 
   describe('chomp and fold code', () => {
-    it.only('should chomp source and add fold blocks to converted content', () => {
+    it('should chomp source and add fold blocks to converted content', () => {
       const input = heredoc`
         :chomp: all
         :chomp-package-replacement: com.mydomain
