@@ -30,7 +30,8 @@
   "main": "lib/index.js",
   "exports": {
     ".": "./lib/index.js",
-    "./antora-migrate-tabs-extension": "./lib/antora-migrate-tabs-extension.js"
+    "./antora-migrate-tabs-extension": "./lib/antora-migrate-tabs-extension.js",
+    "./code-chomping-extension": "./lib/code-chomping-extension.js"
   },
   "imports": {
     "#package": "./package.json"
@@ -44,6 +45,7 @@
     "extension"
   ],
   "devDependencies": {
+    "@asciidoctor/core": "latest",
     "chai": "~4.3",
     "chai-fs": "~2.0",
     "chai-spies": "~1.0",

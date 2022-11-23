@@ -9,6 +9,121 @@ This repository contains Asciidoctor extensions that support the Spring document
 For now, these extensions are only designed for use with Asciidoctor.js.
 The extensions evolved out of the https://github.com/spring-io/spring-asciidoctor-backends[Spring Asciidoctor backends] project.
 
+== Extensions
+
+This section documents the extensions that are provided by this library.
+
+=== Code Chomping
+
+*require name:* @springio/asciidoctor-extensions/code-chomping-extension
+
+The code chomping extension allows specific parts of a Java, Kotlin, or Groovy source block to be removed.
+The extension will not run on any other source, listing, or literal blocks.
+This extension is mainly useful if you have externalized code that includes comments and annotations intended for the compiler's eyes only.
+
+When this extension is registered, it will remove parts of the code that match chomp tags, `@Suppress` / `@SuppressWarnings` annotations, and `@formatter:on` / `@formatter:off` line comments.
+You can also turn on chomping of the header (typically a Javadoc comment or license statement) and package declaration.
+
+The following chomp tags (i.e., comments) are supported:
+
+[%autowidth,cols=~m;~]
+|===
+|Comment |Description
+
+|/**/
+|Chomps the rest of the line and replaces it with +...+
+
+|/* @chomp:line <replacement> */
+|Chomps the rest of the line and replaces it with <replacement>, which defaults to +...+
+
+|// @chomp:file
+|Chomps this line to the end of the file
+|===
+
+Here's an example source block that uses code chomping:
+
+[source,asciidoc]
+....
+[,java]
+----
+public class Example {
+    private final Something something;
+
+    private final Other other;
+
+    public Example() {
+        this.something = /**/ new MockSomething();
+        this.other = /* @chomp:line your thing... */new MyThing();
+    }
+}
+----
+....
+
+The output of this block will appear as follows:
+
+[,java]
+----
+public class Example {
+    private final Something something;
+
+    private final Other other;
+
+    public Example() {
+      this.something = ...
+      this.other = your thing...
+    }
+}
+----
+
+You can set the `chomp` AsciiDoc attribute to change the default settings.
+The attribute can be set on the document or the block.
+The document attribute is the default value.
+The attribute value may be one of the following keywords:
+
+[%autowidth,cols=~m;~]
+|===
+|Flag |Description
+
+|default
+|Enable the `tags`, `formatters`, and `suppresswarnings` operations
+
+|all
+|Enable all chomping operations
+
+|none
+|Disable all chomping operations
+
+|tags
+|Chomp the comment tags
+
+|formatters
+|Chomp any `@formatter:on` / `@formatter:off` line comments
+
+|suppresswarnings
+|Chomp any `@Suppress` or `@SuppressWarnings` annotations
+
+|headers
+|Chomp any file headers up to `package` declaration
+
+|packages
+|Chomp the package declaration, or replace the name if the `chomp-package-replacement` attribute is set
+|===
+
+Instead of dropping the package declaration, you can replace the name.
+To do so, ensure the `packages` operation is enabled.
+Then, set the `chomp-package-replacement` to the replacement name, such as `org.example`.
+When the extension finds the package declaration, it will replace the name in the source with the replacement name you specified.
+
+The following document is configured to update the name in the package declaration in each Java-like source file with `org.example`.
+
+[,asciidoc]
+----
+= My Document
+:chomp-package-replacement: org.example
+----
+
+If this attribute is set and its value is empty, the original package declaration is preserved.
+
 == License
 
 Use of this software is granted under the terms of the https://www.apache.org/licenses/LICENSE-2.0[Apache License, Version 2.0] (Apache-2.0).
