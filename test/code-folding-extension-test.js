@@ -43,33 +43,33 @@ describe('code-folding-extension', () => {
   describe('fold code', () => {
     it('should remove fold directive lines if fold is not enabled on document', () => {
       const input = heredoc`
-        :fold: none
+      :fold: none
 
-        [,java]
-        ----
-        public class Example {
-          // @fold:on
-          public static void main (String[] args) {
-            new Example().sayHello();
-          }
-          // @fold:off
-
-          public void sayHello () {
-            System.out.println("Hello!");
-          }
+      [,java]
+      ----
+      public class Example {
+        // @fold:on
+        public static void main (String[] args) {
+          new Example().sayHello();
         }
-        ----
+        // @fold:off
+
+        public void sayHello () {
+          System.out.println("Hello!");
+        }
+      }
+      ----
       `
       const expected = heredoc`
-        public class Example {
-          public static void main (String[] args) {
-            new Example().sayHello();
-          }
-
-          public void sayHello () {
-            System.out.println("Hello!");
-          }
+      public class Example {
+        public static void main (String[] args) {
+          new Example().sayHello();
         }
+
+        public void sayHello () {
+          System.out.println("Hello!");
+        }
+      }
       `
       const actual = run(input).getBlocks()[0].getSource()
       expect(actual).to.equal(expected)
@@ -77,31 +77,31 @@ describe('code-folding-extension', () => {
 
     it('should remove fold directive lines if fold is not enabled on block', () => {
       const input = heredoc`
-        [,java,fold=none]
-        ----
-        public class Example {
-          // @fold:on
-          public static void main (String[] args) {
-            new Example().sayHello();
-          }
-          // @fold:off
-
-          public void sayHello () {
-            System.out.println("Hello!");
-          }
+      [,java,fold=none]
+      ----
+      public class Example {
+        // @fold:on
+        public static void main (String[] args) {
+          new Example().sayHello();
         }
-        ----
+        // @fold:off
+
+        public void sayHello () {
+          System.out.println("Hello!");
+        }
+      }
+      ----
       `
       const expected = heredoc`
-        public class Example {
-          public static void main (String[] args) {
-            new Example().sayHello();
-          }
-
-          public void sayHello () {
-            System.out.println("Hello!");
-          }
+      public class Example {
+        public static void main (String[] args) {
+          new Example().sayHello();
         }
+
+        public void sayHello () {
+          System.out.println("Hello!");
+        }
+      }
       `
       const actual = run(input).getBlocks()[0].getSource()
       expect(actual).to.equal(expected)
@@ -109,33 +109,33 @@ describe('code-folding-extension', () => {
 
     it('should remove fold directive lines if fold is imports and block has no imports', () => {
       const input = heredoc`
-        :fold: imports
+      :fold: imports
 
-        [,java]
-        ----
-        public class Example {
-          // @fold:on
-          public static void main (String[] args) {
-            new Example().sayHello();
-          }
-          // @fold:off
-
-          public void sayHello () {
-            println("Hello!");
-          }
+      [,java]
+      ----
+      public class Example {
+        // @fold:on
+        public static void main (String[] args) {
+          new Example().sayHello();
         }
-        ----
+        // @fold:off
+
+        public void sayHello () {
+          println("Hello!");
+        }
+      }
+      ----
       `
       const expected = heredoc`
-        public class Example {
-          public static void main (String[] args) {
-            new Example().sayHello();
-          }
-
-          public void sayHello () {
-            println("Hello!");
-          }
+      public class Example {
+        public static void main (String[] args) {
+          new Example().sayHello();
         }
+
+        public void sayHello () {
+          println("Hello!");
+        }
+      }
       `
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
@@ -143,14 +143,14 @@ describe('code-folding-extension', () => {
 
     it('should not wrap contents of block in fold span if empty', () => {
       const input = heredoc`
-        [,java]
-        ----
-        ----
+      [,java]
+      ----
+      ----
 
-        [,js,subs=attributes+]
-        ----
-        {empty}
-        ----
+      [,js,subs=attributes+]
+      ----
+      {empty}
+      ----
       `
       run(input)
         .getBlocks()
@@ -162,29 +162,29 @@ describe('code-folding-extension', () => {
 
     it('should not wrap contents of block in fold span if no directives are found', () => {
       const input = heredoc`
-        [,java]
-        ----
-        public class Example {
-          public static void main (String[] args) {
-            new Example().sayHello();
-          }
-
-          public void sayHello () {
-            System.out.println("Hello!");
-          }
+      [,java]
+      ----
+      public class Example {
+        public static void main (String[] args) {
+          new Example().sayHello();
         }
-        ----
+
+        public void sayHello () {
+          System.out.println("Hello!");
+        }
+      }
+      ----
       `
       const expected = heredoc`
-        public class Example {
-          public static void main (String[] args) {
-            new Example().sayHello();
-          }
-
-          public void sayHello () {
-            System.out.println("Hello!");
-          }
+      public class Example {
+        public static void main (String[] args) {
+          new Example().sayHello();
         }
+
+        public void sayHello () {
+          System.out.println("Hello!");
+        }
+      }
       `
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
@@ -192,31 +192,31 @@ describe('code-folding-extension', () => {
 
     it('should wrap folded and unfolded chunks when fold directives are found', () => {
       const input = heredoc`
-        [,java]
-        ----
-        public class Example {
-          // @fold:on
-          public static void main (String[] args) {
-            new Example().sayHello();
-          }
-
-          // @fold:off
-          public void sayHello () {
-            System.out.println("Hello!");
-          }
+      [,java]
+      ----
+      public class Example {
+        // @fold:on
+        public static void main (String[] args) {
+          new Example().sayHello();
         }
-        ----
+
+        // @fold:off
+        public void sayHello () {
+          System.out.println("Hello!");
+        }
+      }
+      ----
       `
       const expected = heredoc`
-        <span class="fold-block">public class Example {
-        </span><span class="fold-block hide-when-folded">  public static void main (String[] args) {
-            new Example().sayHello();
-          }
+      <span class="fold-block">public class Example {
+      </span><span class="fold-block hide-when-folded">  public static void main (String[] args) {
+          new Example().sayHello();
+        }
 
-        </span><span class="fold-block">  public void sayHello () {
-            System.out.println("Hello!");
-          }
-        }</span>
+      </span><span class="fold-block">  public void sayHello () {
+          System.out.println("Hello!");
+        }
+      }</span>
       `
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
@@ -224,39 +224,39 @@ describe('code-folding-extension', () => {
 
     it('should collapse blank line above fold directive', () => {
       const input = heredoc`
-        [,java]
-        ----
-        public class Team {
-          public String getName() {
-            return this.name;
-          }
-
-          // @fold:on
-          public String getMascot() {
-            return this.mascot;
-          }
-          // @fold:off
-
-          public String[] getColors() {
-            return this.colors;
-          }
+      [,java]
+      ----
+      public class Team {
+        public String getName() {
+          return this.name;
         }
-        ----
+
+        // @fold:on
+        public String getMascot() {
+          return this.mascot;
+        }
+        // @fold:off
+
+        public String[] getColors() {
+          return this.colors;
+        }
+      }
+      ----
       `
       const expected = heredoc`
-        <span class="fold-block">public class Team {
-          public String getName() {
-            return this.name;
-          }
+      <span class="fold-block">public class Team {
+        public String getName() {
+          return this.name;
+        }
 
-        </span><span class="fold-block hide-when-folded">  public String getMascot() {
-            return this.mascot;
-          }
+      </span><span class="fold-block hide-when-folded">  public String getMascot() {
+          return this.mascot;
+        }
 
-        </span><span class="fold-block">  public String[] getColors() {
-            return this.colors;
-          }
-        }</span>
+      </span><span class="fold-block">  public String[] getColors() {
+          return this.colors;
+        }
+      }</span>
       `
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
@@ -264,33 +264,33 @@ describe('code-folding-extension', () => {
 
     it('should replace folded text with text when folded', () => {
       const input = heredoc`
-        [,java]
-        ----
-        public class Example {
-          // @fold:on // main
-          public static void main (String[] args) {
-            new Example().sayHello();
-          }
-          // @fold:off
-
-          public void sayHello () {
-            System.out.println("Hello!");
-          }
+      [,java]
+      ----
+      public class Example {
+        // @fold:on // main
+        public static void main (String[] args) {
+          new Example().sayHello();
         }
-        ----
+        // @fold:off
+
+        public void sayHello () {
+          System.out.println("Hello!");
+        }
+      }
+      ----
       `
       const expected = heredoc`
-        <span class="fold-block">public class Example {
-        </span><span class="fold-block hide-when-unfolded">  // main
+      <span class="fold-block">public class Example {
+      </span><span class="fold-block hide-when-unfolded">  // main
 
-        </span><span class="fold-block hide-when-folded">  public static void main (String[] args) {
-            new Example().sayHello();
-          }
+      </span><span class="fold-block hide-when-folded">  public static void main (String[] args) {
+          new Example().sayHello();
+        }
 
-        </span><span class="fold-block">  public void sayHello () {
-            System.out.println("Hello!");
-          }
-        }</span>
+      </span><span class="fold-block">  public void sayHello () {
+          System.out.println("Hello!");
+        }
+      }</span>
       `
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
@@ -298,11 +298,11 @@ describe('code-folding-extension', () => {
 
     it('should wrap whole contents of block in fold span if starts with unclosed fold directive', () => {
       const input = heredoc`
-        [,java]
-        ----
-        // @fold:on
-        public class Example {}
-        ----
+      [,java]
+      ----
+      // @fold:on
+      public class Example {}
+      ----
       `
       const expected = '<span class="fold-block hide-when-folded">public class Example {}</span>'
       const actual = run(input).getBlocks()[0].getContent()
@@ -311,12 +311,12 @@ describe('code-folding-extension', () => {
 
     it('should wrap whole contents of block in fold span if starts and ends with fold directive', () => {
       const input = heredoc`
-        [,java]
-        ----
-        // @fold:on
-        public class Example {}
-        // @fold:off
-        ----
+      [,java]
+      ----
+      // @fold:on
+      public class Example {}
+      // @fold:off
+      ----
       `
       const expected = '<span class="fold-block hide-when-folded">public class Example {}</span>'
       const actual = run(input).getBlocks()[0].getContent()
@@ -325,16 +325,16 @@ describe('code-folding-extension', () => {
 
     it('should handle case of contents that starts and ends with single fold directive with replacement text', () => {
       const input = heredoc`
-        [,java]
-        ----
-        // @fold:on // reveal answer
-        public class Example {}
-        // @fold:off
-        ----
+      [,java]
+      ----
+      // @fold:on // reveal answer
+      public class Example {}
+      // @fold:off
+      ----
       `
       const expected = heredoc`
-        <span class="fold-block hide-when-unfolded">// reveal answer
-        </span><span class="fold-block hide-when-folded">public class Example {}</span>
+      <span class="fold-block hide-when-unfolded">// reveal answer
+      </span><span class="fold-block hide-when-folded">public class Example {}</span>
       `
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
@@ -342,33 +342,33 @@ describe('code-folding-extension', () => {
 
     it('should fold import statements by default', () => {
       const input = heredoc`
-        [,java]
-        ----
-        import java.util.Arrays;
+      [,java]
+      ----
+      import java.util.Arrays;
 
-        import org.springframework.boot.SpringApplication;
-        import org.springframework.boot.autoconfigure.SpringBootApplication;
+      import org.springframework.boot.SpringApplication;
+      import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-        @SpringBootApplication
-        public class MyApplication {
-            public static void main(String[] args) {
-                SpringApplication.run(MyApplication.class, Arrays.asList(args));
-            }
-        }
-        ----
+      @SpringBootApplication
+      public class MyApplication {
+          public static void main(String[] args) {
+              SpringApplication.run(MyApplication.class, Arrays.asList(args));
+          }
+      }
+      ----
       `
       const expected = heredoc`
-        <span class="fold-block hide-when-folded">import java.util.Arrays;
+      <span class="fold-block hide-when-folded">import java.util.Arrays;
 
-        import org.springframework.boot.SpringApplication;
-        import org.springframework.boot.autoconfigure.SpringBootApplication;
+      import org.springframework.boot.SpringApplication;
+      import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-        </span><span class="fold-block">@SpringBootApplication
-        public class MyApplication {
-            public static void main(String[] args) {
-                SpringApplication.run(MyApplication.class, Arrays.asList(args));
-            }
-        }</span>
+      </span><span class="fold-block">@SpringBootApplication
+      public class MyApplication {
+          public static void main(String[] args) {
+              SpringApplication.run(MyApplication.class, Arrays.asList(args));
+          }
+      }</span>
       `
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
@@ -376,17 +376,17 @@ describe('code-folding-extension', () => {
 
     it('should fold block with only import statements', () => {
       const input = heredoc`
-        [,java]
-        ----
-        import org.springframework.context.annotation.*;
-        import org.springframework.security.config.annotation.authentication.builders.*;
-        import org.springframework.security.config.annotation.web.configuration.*;
-        ----
+      [,java]
+      ----
+      import org.springframework.context.annotation.*;
+      import org.springframework.security.config.annotation.authentication.builders.*;
+      import org.springframework.security.config.annotation.web.configuration.*;
+      ----
       `
       const expected = heredoc`
-        <span class="fold-block hide-when-folded">import org.springframework.context.annotation.*;
-        import org.springframework.security.config.annotation.authentication.builders.*;
-        import org.springframework.security.config.annotation.web.configuration.*;</span>
+      <span class="fold-block hide-when-folded">import org.springframework.context.annotation.*;
+      import org.springframework.security.config.annotation.authentication.builders.*;
+      import org.springframework.security.config.annotation.web.configuration.*;</span>
       `
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
@@ -394,33 +394,33 @@ describe('code-folding-extension', () => {
 
     it('should fold import statements that follow package declaration', () => {
       const input = heredoc`
-        [,java]
-        ----
-        package org.example;
+      [,java]
+      ----
+      package org.example;
 
-        import org.springframework.boot.SpringApplication;
-        import org.springframework.boot.autoconfigure.SpringBootApplication;
+      import org.springframework.boot.SpringApplication;
+      import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-        @SpringBootApplication
-        public class MyApplication {
-            public static void main(String[] args) {
-                SpringApplication.run(MyApplication.class, args);
-            }
-        }
-        ----
+      @SpringBootApplication
+      public class MyApplication {
+          public static void main(String[] args) {
+              SpringApplication.run(MyApplication.class, args);
+          }
+      }
+      ----
       `
       const expected = heredoc`
-        <span class="fold-block">package org.example;
+      <span class="fold-block">package org.example;
 
-        </span><span class="fold-block hide-when-folded">import org.springframework.boot.SpringApplication;
-        import org.springframework.boot.autoconfigure.SpringBootApplication;
+      </span><span class="fold-block hide-when-folded">import org.springframework.boot.SpringApplication;
+      import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-        </span><span class="fold-block">@SpringBootApplication
-        public class MyApplication {
-            public static void main(String[] args) {
-                SpringApplication.run(MyApplication.class, args);
-            }
-        }</span>
+      </span><span class="fold-block">@SpringBootApplication
+      public class MyApplication {
+          public static void main(String[] args) {
+              SpringApplication.run(MyApplication.class, args);
+          }
+      }</span>
       `
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
@@ -428,39 +428,39 @@ describe('code-folding-extension', () => {
 
     it('should fold import statements that follow header and package declaration', () => {
       const input = heredoc`
-        [,java]
-        ----
-        /*
-         * License header
-         */
-        package org.example;
+      [,java]
+      ----
+      /*
+       * License header
+       */
+      package org.example;
 
-        import org.springframework.boot.SpringApplication;
-        import org.springframework.boot.autoconfigure.SpringBootApplication;
+      import org.springframework.boot.SpringApplication;
+      import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-        @SpringBootApplication
-        public class MyApplication {
-            public static void main(String[] args) {
-                SpringApplication.run(MyApplication.class, args);
-            }
-        }
-        ----
+      @SpringBootApplication
+      public class MyApplication {
+          public static void main(String[] args) {
+              SpringApplication.run(MyApplication.class, args);
+          }
+      }
+      ----
       `
       const expected = heredoc`
-        <span class="fold-block">/*
-         * License header
-         */
-        package org.example;
+      <span class="fold-block">/*
+       * License header
+       */
+      package org.example;
 
-        </span><span class="fold-block hide-when-folded">import org.springframework.boot.SpringApplication;
-        import org.springframework.boot.autoconfigure.SpringBootApplication;
+      </span><span class="fold-block hide-when-folded">import org.springframework.boot.SpringApplication;
+      import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-        </span><span class="fold-block">@SpringBootApplication
-        public class MyApplication {
-            public static void main(String[] args) {
-                SpringApplication.run(MyApplication.class, args);
-            }
-        }</span>
+      </span><span class="fold-block">@SpringBootApplication
+      public class MyApplication {
+          public static void main(String[] args) {
+              SpringApplication.run(MyApplication.class, args);
+          }
+      }</span>
       `
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
@@ -468,43 +468,43 @@ describe('code-folding-extension', () => {
 
     it('should not fold import statements if fold is tags', () => {
       const input = heredoc`
-        [,java]
-        ----
-        import org.springframework.beans.factory.annotation.Autowired;
+      [,java]
+      ----
+      import org.springframework.beans.factory.annotation.Autowired;
 
-        import org.springframework.context.annotation.*;
-        import org.springframework.security.config.annotation.authentication.builders.*;
-        import org.springframework.security.config.annotation.web.configuration.*;
+      import org.springframework.context.annotation.*;
+      import org.springframework.security.config.annotation.authentication.builders.*;
+      import org.springframework.security.config.annotation.web.configuration.*;
 
-        @Configuration
-        @EnableWebSecurity
-        public class WebSecurityConfig {
-          @Bean
-          public UserDetailsService userDetailsService() {
-            InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-            manager.createUser(User.withDefaultPasswordEncoder())
-            return manager;
-          }
+      @Configuration
+      @EnableWebSecurity
+      public class WebSecurityConfig {
+        @Bean
+        public UserDetailsService userDetailsService() {
+          InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+          manager.createUser(User.withDefaultPasswordEncoder())
+          return manager;
         }
-        ----
+      }
+      ----
       `
       const expected = heredoc`
-        import org.springframework.beans.factory.annotation.Autowired;
+      import org.springframework.beans.factory.annotation.Autowired;
 
-        import org.springframework.context.annotation.*;
-        import org.springframework.security.config.annotation.authentication.builders.*;
-        import org.springframework.security.config.annotation.web.configuration.*;
+      import org.springframework.context.annotation.*;
+      import org.springframework.security.config.annotation.authentication.builders.*;
+      import org.springframework.security.config.annotation.web.configuration.*;
 
-        @Configuration
-        @EnableWebSecurity
-        public class WebSecurityConfig {
-          @Bean
-          public UserDetailsService userDetailsService() {
-            InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-            manager.createUser(User.withDefaultPasswordEncoder())
-            return manager;
-          }
+      @Configuration
+      @EnableWebSecurity
+      public class WebSecurityConfig {
+        @Bean
+        public UserDetailsService userDetailsService() {
+          InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+          manager.createUser(User.withDefaultPasswordEncoder())
+          return manager;
         }
+      }
       `
       const actual = run(input, { attributes: { 'fold@': 'tags' } })
         .getBlocks()[0]
@@ -514,37 +514,37 @@ describe('code-folding-extension', () => {
 
     it('should remove fold directive lines if fold is imports and block has imports', () => {
       const input = heredoc`
-        :fold: imports
+      :fold: imports
 
-        [,java]
-        ----
-        import static java.lang.System.out;
+      [,java]
+      ----
+      import static java.lang.System.out;
 
-        public class Example {
-          // @fold:on
-          public static void main (String[] args) {
-            new Example().sayHello();
-          }
-          // @fold:off
-
-          public void sayHello () {
-            out.println("Hello!");
-          }
+      public class Example {
+        // @fold:on
+        public static void main (String[] args) {
+          new Example().sayHello();
         }
-        ----
+        // @fold:off
+
+        public void sayHello () {
+          out.println("Hello!");
+        }
+      }
+      ----
       `
       const expected = heredoc`
-        <span class="fold-block hide-when-folded">import static java.lang.System.out;
+      <span class="fold-block hide-when-folded">import static java.lang.System.out;
 
-        </span><span class="fold-block">public class Example {
-          public static void main (String[] args) {
-            new Example().sayHello();
-          }
+      </span><span class="fold-block">public class Example {
+        public static void main (String[] args) {
+          new Example().sayHello();
+        }
 
-          public void sayHello () {
-            out.println("Hello!");
-          }
-        }</span>
+        public void sayHello () {
+          out.println("Hello!");
+        }
+      }</span>
       `
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
@@ -552,25 +552,25 @@ describe('code-folding-extension', () => {
 
     it('should not fold import statements if language is not Java-like', () => {
       const input = heredoc`
-        [,js]
-        ----
-        import { unlink } from 'node:fs/promises';
+      [,js]
+      ----
+      import { unlink } from 'node:fs/promises';
 
-        try {
-          await unlink('/tmp/scratch.txt');
-        } catch (error) {
-          console.error('there was an error:', error.message);
-        }
-        ----
+      try {
+        await unlink('/tmp/scratch.txt');
+      } catch (error) {
+        console.error('there was an error:', error.message);
+      }
+      ----
       `
       const expected = heredoc`
-        import { unlink } from 'node:fs/promises';
+      import { unlink } from 'node:fs/promises';
 
-        try {
-          await unlink('/tmp/scratch.txt');
-        } catch (error) {
-          console.error('there was an error:', error.message);
-        }
+      try {
+        await unlink('/tmp/scratch.txt');
+      } catch (error) {
+        console.error('there was an error:', error.message);
+      }
       `
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
@@ -578,40 +578,40 @@ describe('code-folding-extension', () => {
 
     it('should apply substitutions before adding fold spans', () => {
       const input = heredoc`
-        [,java]
-        ----
-        import java.util.List;
+      [,java]
+      ----
+      import java.util.List;
 
-        import org.springframework.boot.ApplicationArguments;
-        import org.springframework.stereotype.Component;
+      import org.springframework.boot.ApplicationArguments;
+      import org.springframework.stereotype.Component;
 
-        @Component
-        public class MyBean {
-            public MyBean(ApplicationArguments args) {
-                boolean debug = args.containsOption("debug");
-                List<String> files = args.getNonOptionArgs();
-                // @fold:on // if debug && number of files > 0
-                if (debug && !files.isEmpty()) System.out.println(files);
-                // @fold:off
-            }
-        }
-        ----
+      @Component
+      public class MyBean {
+          public MyBean(ApplicationArguments args) {
+              boolean debug = args.containsOption("debug");
+              List<String> files = args.getNonOptionArgs();
+              // @fold:on // if debug && number of files > 0
+              if (debug && !files.isEmpty()) System.out.println(files);
+              // @fold:off
+          }
+      }
+      ----
       `
       const expected = heredoc`
-        <span class="fold-block hide-when-folded">import java.util.List;
+      <span class="fold-block hide-when-folded">import java.util.List;
 
-        import org.springframework.boot.ApplicationArguments;
-        import org.springframework.stereotype.Component;
+      import org.springframework.boot.ApplicationArguments;
+      import org.springframework.stereotype.Component;
 
-        </span><span class="fold-block">@Component
-        public class MyBean {
-            public MyBean(ApplicationArguments args) {
-                boolean debug = args.containsOption("debug");
-                List&lt;String&gt; files = args.getNonOptionArgs();
-        </span><span class="fold-block hide-when-unfolded">        // if debug &amp;&amp; number of files &gt; 0
-        </span><span class="fold-block hide-when-folded">        if (debug &amp;&amp; !files.isEmpty()) System.out.println(files);
-        </span><span class="fold-block">    }
-        }</span>
+      </span><span class="fold-block">@Component
+      public class MyBean {
+          public MyBean(ApplicationArguments args) {
+              boolean debug = args.containsOption("debug");
+              List&lt;String&gt; files = args.getNonOptionArgs();
+      </span><span class="fold-block hide-when-unfolded">        // if debug &amp;&amp; number of files &gt; 0
+      </span><span class="fold-block hide-when-folded">        if (debug &amp;&amp; !files.isEmpty()) System.out.println(files);
+      </span><span class="fold-block">    }
+      }</span>
       `
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
