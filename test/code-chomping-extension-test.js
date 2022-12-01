@@ -2,13 +2,11 @@
 'use strict'
 
 const Asciidoctor = require('@asciidoctor/core')()
-const { expect, heredoc, spy } = require('./harness')
+const { expect, filterLines, heredoc, spy } = require('./harness')
 const { name: packageName } = require('#package')
 
 describe('code-chomping-extension', () => {
   const ext = require(packageName + '/code-chomping-extension')
-
-  const filterLines = (str, predicate) => str.split('\n').filter(predicate).join('\n')
 
   const run = (input = [], opts = {}) => {
     opts.extension_registry = ext.register(opts.extension_registry || Asciidoctor.Extensions.create())

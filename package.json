@@ -36,7 +36,7 @@
   },
   "exports": {
     ".": "./lib/index.js",
-    "./antora-migrate-tabs-extension": "./lib/antora-migrate-tabs-extension.js",
+    "./tabs-migration-antora-extension": "./lib/tabs-migration-antora-extension.js",
     "./code-chomping-extension": "./lib/code-chomping-extension.js",
     "./code-folding-extension": "./lib/code-folding-extension.js",
     "./browser/css/source-toolbox.css": "./browser/css/source-toolbox.css"

@@ -219,6 +219,39 @@ The attribute value may be one of the following keywords:
 |Fold `@fold:on` / `@fold:off` tags
 |===
 
+== Migrate Tabs Antora Extension
+
+*require name:* @springio/asciidoctor-extensions/migrate-tabs-antora-extension
+
+In addition to Asciidoctor extensions, this library also provides one Antora extension.
+The purpose of this extension is to migrate the AsciiDoc source from using Spring tabs to using https://github.com/asciidoctor/asciidoctor-tabs[Asciidoctor tabs].
+It also has the ability to unwrap unneeded example blocks.
+
+IMPORTANT: Be sure to register this extension under the `antora.extensions` key in the playbook, not the `asciidoc.extensions` key!
+
+The extension accepts several configuration options:
+
+save_result (default: false)::
+A boolean option that controls whether the migrated source is written back to the worktree.
+This option is only relevant when the file is read from a local directory, which is the case for git references that have an associated worktree.
+
+unwrap_example_block (default: tabs)::
+An enumeration option that controls when example block delimiters are removed.
+
+* `never` - Never remove example block delimiters
+* `tabs` - Migrate example block that contains tabs to a tabs block
+* `always` - Remove example block delimiters if example block has no metadata and only contains a single child
+
+tabs_delimiter_length (default: 6)::
+An integer option that controls the length of the delimiter for a tabs block.
+The recommended value is 6.
+You can also set it to 4 to use the conventional length.
+
+normalize (default: false)::
+A boolean option that controls whether sequential empty lines are collapsed into a single empty line.
+Regardless of the value of this option, the extension will relocate block metadata lines to be directly above the block.
+The extension will also insert an empty line between tabs if one does not exist.
+
 == License
 
 Use of this software is granted under the terms of the https://www.apache.org/licenses/LICENSE-2.0[Apache License, Version 2.0] (Apache-2.0).

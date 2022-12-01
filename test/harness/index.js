@@ -43,4 +43,6 @@ const heredoc = (literals, ...vals) => {
   return (indentSize ? lines.map((l) => (l.charAt() === ' ' ? l.slice(indentSize) : l)) : lines).join('')
 }
 
-module.exports = { cleanDir, expect: chai.expect, heredoc, spy: chai.spy }
+const filterLines = (str, predicate) => str.split('\n').filter(predicate).join('\n')
+
+module.exports = { cleanDir, expect: chai.expect, filterLines, heredoc, spy: chai.spy }
