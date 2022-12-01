@@ -10,9 +10,9 @@
     "Phil Webb <pwebb@vmware.com>",
     "Andy Wilkinson"
   ],
-  "repository": "github:opendevise/spring-asciidoctor-extensions",
+  "repository": "github:opendevise/springio-asciidoctor-extensions",
   "bugs": {
-    "url": "https://github.com/opendevise/spring-asciidoctor-extensions/issues"
+    "url": "https://github.com/opendevise/springio-asciidoctor-extensions/issues"
   },
   "engines": {
     "node": ">=16.0.0"
