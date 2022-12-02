@@ -55,12 +55,12 @@
 
   function toggleFolds (code) {
     var scratchBlock = getScratchBlock(code)
-    var newState = code.classList.contains('unfolded') ? 'folded' : 'unfolded'
+    var newState = code.classList.contains('is-unfolded') ? 'folded' : 'unfolded'
     ;[].slice.call(code.querySelectorAll('.fold-block')).forEach(function (foldBlock) {
       if (foldBlock.classList.length === 1) return
       foldBlock.removeEventListener('transitionrun', clearMaxHeight)
       foldBlock.removeEventListener('transitionend', clearMaxHeight)
-      if (foldBlock.classList.contains('hide-when-' + newState)) {
+      if (foldBlock.classList.contains('is-hidden-' + newState)) {
         foldBlock.style.maxHeight = Math.round(foldBlock.getBoundingClientRect().height) + 'px'
         foldBlock.addEventListener('transitionrun', clearMaxHeight)
       } else {
@@ -71,10 +71,10 @@
     })
     scratchBlock.innerHTML = ''
     this.setAttribute('title', this.dataset[newState + 'Title'])
-    code.classList[newState === 'unfolded' ? 'add' : 'remove']('unfolded')
+    code.classList[newState === 'unfolded' ? 'add' : 'remove']('is-unfolded')
     //if (newState === 'unfolded') return
     //window.setTimeout(function () {
-    //  code.parentNode.scrollIntoView({ block: 'nearest' })
+    //  code.parentNode.scrollIntoView({ block: 'nearest', behavior: 'instant' })
     //}, 300)
   }
 
@@ -92,9 +92,9 @@
 
   function writeToClipboard (code) {
     var subject = code
-    if (code.querySelector('.hide-when-unfoled')) {
+    if (code.querySelector('.is-hidden-unfolded')) {
       subject = code.cloneNode(true)
-      ;[].slice.call(subject.querySelectorAll('.hide-when-unfolded')).forEach(function (el) {
+      ;[].slice.call(subject.querySelectorAll('.is-hidden-unfolded')).forEach(function (el) {
         el.parentNode.removeChild(el)
       })
     }

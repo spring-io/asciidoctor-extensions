@@ -29,26 +29,26 @@
   }
 }
 
-.doc pre code:not(.unfolded) .hide-when-folded,
-.doc pre code.unfolded .hide-when-unfolded {
+.doc pre code:not(.is-unfolded) .is-hidden-folded,
+.doc pre code.is-unfolded .is-hidden-unfolded {
   max-height: 0;
   opacity: 0;
 }
 
 /* NOTE these transition timings must be modified extremely carefully to ensure a smooth transition */
-.doc pre code:not(.unfolded) .hide-when-folded {
-  transition: max-height 300ms ease-in-out, opacity 100ms linear;
+.doc pre code:not(.is-unfolded) .is-hidden-folded {
+  transition: max-height 300ms ease-in-out, opacity 150ms linear;
 }
 
-.doc pre code.unfolded .hide-when-folded {
+.doc pre code.is-unfolded .is-hidden-folded {
   transition: max-height 200ms ease, opacity 100ms linear 200ms;
 }
 
-.doc pre code:not(.unfolded) .hide-when-unfolded {
-  transition: max-height 200ms ease, opacity 100ms linear 225ms;
+.doc pre code:not(.is-unfolded) .is-hidden-unfolded {
+  transition: max-height 200ms ease, opacity 100ms linear 150ms;
 }
 
-.doc pre code.unfolded .hide-when-unfolded {
+.doc pre code.is-unfolded .is-hidden-unfolded {
   transition: max-height 300ms ease-out, opacity 100ms linear;
 }
 
