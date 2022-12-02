@@ -92,7 +92,7 @@
 
   function writeToClipboard (code) {
     var subject = code
-    if (code.querySelector('.is-hidden-unfolded')) {
+    if (code.querySelector('.fold-block')) {
       subject = code.cloneNode(true)
       ;[].slice.call(subject.querySelectorAll('.is-hidden-unfolded')).forEach(function (el) {
         el.parentNode.removeChild(el)

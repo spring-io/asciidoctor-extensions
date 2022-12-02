@@ -9,6 +9,7 @@ For a detailed view of what's changed, refer to the {url-repo}/commits[commit hi
 === Fixed
 
 * Use correct source language (`kotlin`) when looking for Kotlin code blocks
+* When copying code to clipboard, always clone code block if it contains fold blocks
 
 == 1.0.0-alpha.2 (2022-12-02)
 
