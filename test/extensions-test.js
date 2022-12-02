@@ -132,7 +132,7 @@ describe('extensions', () => {
       }
       `
       const expectedContent = heredoc`
-      <span class="fold-block hide-when-folded">import java.io.IOException;
+      <span class="fold-block is-hidden-folded">import java.io.IOException;
 
       import jakarta.servlet.*;
 
@@ -161,8 +161,8 @@ describe('extensions', () => {
           return application.sources(SampleServletApplication.class);
         }
 
-      </span><span class="fold-block hide-when-unfolded">  // main
-      </span><span class="fold-block hide-when-folded">  public static void main(String[] args) {
+      </span><span class="fold-block is-hidden-unfolded">  // main
+      </span><span class="fold-block is-hidden-folded">  public static void main(String[] args) {
           SpringApplication.run(SampleServletApplication.class, args);
         }
       </span><span class="fold-block">}</span>

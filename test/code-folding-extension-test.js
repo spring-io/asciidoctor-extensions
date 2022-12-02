@@ -185,7 +185,7 @@ describe('code-folding-extension', () => {
 
       const expected = heredoc`
       <span class="fold-block">public class Example {
-      </span><span class="fold-block hide-when-folded">  public static void main (String[] args) {
+      </span><span class="fold-block is-hidden-folded">  public static void main (String[] args) {
           new Example().sayHello();
         }
 
@@ -226,7 +226,7 @@ describe('code-folding-extension', () => {
           return this.name;
         }
 
-      </span><span class="fold-block hide-when-folded">  public String getMascot() {
+      </span><span class="fold-block is-hidden-folded">  public String getMascot() {
           return this.mascot;
         }
 
@@ -260,9 +260,9 @@ describe('code-folding-extension', () => {
 
       const expected = heredoc`
       <span class="fold-block">public class Example {
-      </span><span class="fold-block hide-when-unfolded">  // main
+      </span><span class="fold-block is-hidden-unfolded">  // main
 
-      </span><span class="fold-block hide-when-folded">  public static void main (String[] args) {
+      </span><span class="fold-block is-hidden-folded">  public static void main (String[] args) {
           new Example().sayHello();
         }
 
@@ -285,7 +285,7 @@ describe('code-folding-extension', () => {
       ----
       `
 
-      const expected = `<span class="fold-block hide-when-folded">${code}</span>`
+      const expected = `<span class="fold-block is-hidden-folded">${code}</span>`
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
     })
@@ -301,7 +301,7 @@ describe('code-folding-extension', () => {
       ----
       `
 
-      const expected = `<span class="fold-block hide-when-folded">${code}</span>`
+      const expected = `<span class="fold-block is-hidden-folded">${code}</span>`
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
     })
@@ -318,8 +318,8 @@ describe('code-folding-extension', () => {
       `
 
       const expected = heredoc`
-      <span class="fold-block hide-when-unfolded">// reveal answer
-      </span><span class="fold-block hide-when-folded">${code}</span>
+      <span class="fold-block is-hidden-unfolded">// reveal answer
+      </span><span class="fold-block is-hidden-folded">${code}</span>
       `
 
       const actual = run(input).getBlocks()[0].getContent()
@@ -345,7 +345,7 @@ describe('code-folding-extension', () => {
       `
 
       const expected = heredoc`
-      <span class="fold-block hide-when-folded">import java.util.Arrays;
+      <span class="fold-block is-hidden-folded">import java.util.Arrays;
 
       import org.springframework.boot.SpringApplication;
       import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -375,7 +375,7 @@ describe('code-folding-extension', () => {
       ----
       `
 
-      const expected = `<span class="fold-block hide-when-folded">${code}</span>`
+      const expected = `<span class="fold-block is-hidden-folded">${code}</span>`
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
     })
@@ -401,7 +401,7 @@ describe('code-folding-extension', () => {
       const expected = heredoc`
       <span class="fold-block">package org.example;
 
-      </span><span class="fold-block hide-when-folded">import org.springframework.boot.SpringApplication;
+      </span><span class="fold-block is-hidden-folded">import org.springframework.boot.SpringApplication;
       import org.springframework.boot.autoconfigure.SpringBootApplication;
 
       </span><span class="fold-block">@SpringBootApplication
@@ -443,7 +443,7 @@ describe('code-folding-extension', () => {
        */
       package org.example;
 
-      </span><span class="fold-block hide-when-folded">import org.springframework.boot.SpringApplication;
+      </span><span class="fold-block is-hidden-folded">import org.springframework.boot.SpringApplication;
       import org.springframework.boot.autoconfigure.SpringBootApplication;
 
       </span><span class="fold-block">@SpringBootApplication
@@ -515,7 +515,7 @@ describe('code-folding-extension', () => {
       `
 
       const expected = heredoc`
-      <span class="fold-block hide-when-folded">import static java.lang.System.out;
+      <span class="fold-block is-hidden-folded">import static java.lang.System.out;
 
       </span><span class="fold-block">public class Example {
         public static void main (String[] args) {
@@ -578,7 +578,7 @@ describe('code-folding-extension', () => {
       `
 
       const expected = heredoc`
-      <span class="fold-block hide-when-folded">import java.util.List;
+      <span class="fold-block is-hidden-folded">import java.util.List;
 
       import org.springframework.boot.ApplicationArguments;
       import org.springframework.stereotype.Component;
@@ -588,8 +588,8 @@ describe('code-folding-extension', () => {
           public MyBean(ApplicationArguments args) {
               boolean debug = args.containsOption("debug");
               List&lt;String&gt; files = args.getNonOptionArgs();
-      </span><span class="fold-block hide-when-unfolded">        // if debug &amp;&amp; number of files &gt; 0
-      </span><span class="fold-block hide-when-folded">        if (debug &amp;&amp; !files.isEmpty()) System.out.println(files);
+      </span><span class="fold-block is-hidden-unfolded">        // if debug &amp;&amp; number of files &gt; 0
+      </span><span class="fold-block is-hidden-folded">        if (debug &amp;&amp; !files.isEmpty()) System.out.println(files);
       </span><span class="fold-block">    }
       }</span>
       `
