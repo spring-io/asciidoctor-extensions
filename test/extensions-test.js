@@ -94,6 +94,7 @@ describe('extensions', () => {
       }
       ----
       `
+
       const expectedSource = heredoc`
       import java.io.IOException;
 
@@ -131,6 +132,7 @@ describe('extensions', () => {
         // @fold:off
       }
       `
+
       const expectedContent = heredoc`
       <span class="fold-block is-hidden-folded">import java.io.IOException;
 
@@ -167,6 +169,7 @@ describe('extensions', () => {
         }
       </span><span class="fold-block">}</span>
       `
+
       const block = run(input).getBlocks()[0]
       expect(block.getSource()).to.equal(expectedSource)
       expect(block.getContent()).to.equal(expectedContent)

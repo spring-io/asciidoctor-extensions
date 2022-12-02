@@ -194,6 +194,7 @@ describe('code-folding-extension', () => {
         }
       }</span>
       `
+
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
     })
@@ -271,6 +272,7 @@ describe('code-folding-extension', () => {
         }
       }</span>
       `
+
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
     })
@@ -326,7 +328,7 @@ describe('code-folding-extension', () => {
       expect(actual).to.equal(expected)
     })
 
-    it('should fold import statements by default', () => {
+    it('should fold import statements by default (Java)', () => {
       const input = heredoc`
       [,java]
       ----
@@ -357,6 +359,77 @@ describe('code-folding-extension', () => {
           }
       }</span>
       `
+
+      const actual = run(input).getBlocks()[0].getContent()
+      expect(actual).to.equal(expected)
+    })
+
+    it('should fold import statements by default (Kotlin)', () => {
+      const input = heredoc`
+      [,kotlin]
+      ----
+      import org.springframework.web.bind.annotation.*
+
+      import org.springframework.security.web.csrf.CsrfToken
+
+      @RestController
+      class CsrfController {
+          @RequestMapping("/csrf")
+          fun csrf(token: CsrfToken): CsrfToken {
+              return token
+          }
+      }
+      ----
+      `
+
+      const expected = heredoc`
+      <span class="fold-block is-hidden-folded">import org.springframework.web.bind.annotation.*
+
+      import org.springframework.security.web.csrf.CsrfToken
+
+      </span><span class="fold-block">@RestController
+      class CsrfController {
+          @RequestMapping("/csrf")
+          fun csrf(token: CsrfToken): CsrfToken {
+              return token
+          }
+      }</span>
+      `
+
+      const actual = run(input).getBlocks()[0].getContent()
+      expect(actual).to.equal(expected)
+    })
+
+    it('should fold import statements by default (Groovy)', () => {
+      const input = heredoc`
+      [,groovy]
+      ----
+      import org.springframework.web.bind.annotation.RestController
+      import org.springframework.web.bind.annotation.RequestMapping
+
+      @RestController
+      class WebApplication {
+          @RequestMapping("/")
+          String home() {
+              "Hello World!"
+          }
+      }
+      ----
+      `
+
+      const expected = heredoc`
+      <span class="fold-block is-hidden-folded">import org.springframework.web.bind.annotation.RestController
+      import org.springframework.web.bind.annotation.RequestMapping
+
+      </span><span class="fold-block">@RestController
+      class WebApplication {
+          @RequestMapping("/")
+          String home() {
+              "Hello World!"
+          }
+      }</span>
+      `
+
       const actual = run(input).getBlocks()[0].getContent()
       expect(actual).to.equal(expected)
     })

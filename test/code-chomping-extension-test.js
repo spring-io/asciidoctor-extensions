@@ -136,7 +136,7 @@ describe('code-chomping-extension', () => {
       :chomp-package-replacement:
       :chomp: all
 
-      [,kt]
+      [,kotlin]
       ----
       ${code}
       ----
