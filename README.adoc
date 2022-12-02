@@ -5,7 +5,13 @@ ifdef::env-github[]
 :toclevels: 1
 endif::[]
 
-This repository contains Asciidoctor extensions that support the Spring documentation.
+ifdef::env-npm[]
+IMPORTANT: The package at @opendevise/springio-asciidoctor-extensions is only a temporary name for this package.
+*Depend on it at your own risk.*
+The package will be removed from this location once it has been published under its official name, @springio/asciidoctor-extensions.
+endif::[]
+
+This library provides Asciidoctor extensions that support the Spring documentation.
 For now, these extensions are only designed for use with Asciidoctor.js.
 The extensions evolved out of the https://github.com/spring-io/spring-asciidoctor-backends[Spring Asciidoctor backends] project.
 
