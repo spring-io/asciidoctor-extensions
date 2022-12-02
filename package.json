@@ -59,6 +59,7 @@
     "chai-fs": "~2.0",
     "chai-spies": "~1.0",
     "dirty-chai": "~2.0",
+    "downdoc": "github:mojavelinux/downdoc",
     "eslint": "~8.27",
     "eslint-config-standard": "~17.0",
     "mocha": "~10.1",
