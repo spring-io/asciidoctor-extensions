@@ -45,7 +45,7 @@
 }
 
 .doc pre code:not(.is-unfolded) .is-hidden-unfolded {
-  transition: max-height 200ms ease, opacity 100ms linear 150ms;
+  transition: max-height 200ms ease, opacity 150ms linear 150ms;
 }
 
 .doc pre code.is-unfolded .is-hidden-unfolded {
