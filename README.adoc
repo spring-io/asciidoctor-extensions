@@ -1,12 +1,8 @@
 = Spring Asciidoctor Extensions
-ifdef::env-github[]
-:toc: preamble
-:toc-title: Contents
-:toclevels: 1
-endif::[]
 ifdef::env-browser[]
 :toc: right
 :toc-title: Contents
+:toclevels: 2
 endif::[]
 :url-project: https://github.com/spring-io/asciidoctor-extensions
 :url-chai: http://chaijs.com/api/bdd/
@@ -45,7 +41,7 @@ The following two sections introduce the extensions provided by this library and
 
 == Extensions
 
-This section documents the extensions that are provided by this library.
+This section documents the Asciidoctor extensions that are provided by this library.
 
 === Code Chomping
 
@@ -253,9 +249,13 @@ The attribute value may be one of the following keywords:
 |Fold `@fold:on` / `@fold:off` tags
 |===
 
-== Migrate Tabs Antora Extension
+== Antora Extensions
 
-*require name:* @springio/asciidoctor-extensions/migrate-tabs-antora-extension
+This section documents the auxiliary Antora extensions that are provided by this library.
+
+=== Tabs Migration
+
+*require name:* @springio/asciidoctor-extensions/tabs-migration-antora-extension
 
 In addition to Asciidoctor extensions, this library also provides one Antora extension.
 The purpose of this extension is to migrate the AsciiDoc source from using Spring tabs to using https://github.com/asciidoctor/asciidoctor-tabs[Asciidoctor tabs].
