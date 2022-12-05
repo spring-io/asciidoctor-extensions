@@ -8,7 +8,7 @@ ifdef::env-browser[]
 :toc: right
 :toc-title: Contents
 endif::[]
-:url-project: https://github.com/opendevise/springio-asciidoctor-extensions
+:url-project: https://github.com/spring-io/asciidoctor-extensions
 :url-chai: http://chaijs.com/api/bdd/
 :url-eslint: https://eslint.org
 :url-git: https://git-scm.com
@@ -20,15 +20,28 @@ endif::[]
 :url-nvm-install: {url-nvm}#installation
 :url-standardjs: https://standardjs.com/rules.html
 
-ifdef::env-npm[]
-IMPORTANT: The package at @opendevise/springio-asciidoctor-extensions is only a temporary name for this package.
-*Depend on it at your own risk.*
-The package will be removed from this location once it has been published under its official name, @springio/asciidoctor-extensions.
-
-endif::[]
 This library provides Asciidoctor extensions that support the Spring documentation.
 For now, these extensions are only designed for use with Asciidoctor.js.
 The extensions evolved out of the https://github.com/spring-io/spring-asciidoctor-backends[Spring Asciidoctor backends] project.
+
+== Prerequisites
+
+In order to use this extension, you must have Node.js 16 or higher installed on your machine.
+These extensions are intended to be used with Asciidoctor.js.
+Since this project does not declare Asciidoctor.js as a dependency to afford you flexibility, you must have Asciidoctor.js 2.2 or higher installed in your project.
+
+Use the following command to install the @springio/asciidoctor-extensions package into your project:
+
+[,console]
+----
+$ npm i @springio/asciidoctor-extensions
+----
+
+ifndef::env-npm[]
+To use the development version instead, refer to the <<Development Quickstart>>.
+
+endif::[]
+The following two sections introduce the extensions provided by this library and how to activate them.
 
 == Extensions
 
@@ -384,7 +397,7 @@ If you want to use the project locally before it is published, you can specify t
 [,json]
 ----
 "dependencies": {
-  "@opendevise/springio-asciidoctor-extensions": "/path/to/project"
+  "@springio/asciidoctor-extensions": "/path/to/project"
 }
 ----
 
