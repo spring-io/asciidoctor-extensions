@@ -7,7 +7,7 @@ on:
     branches: [main]
     paths-ignore: ['*.adoc']
   schedule:
-  - cron: '30 2 * * TUES'
+  - cron: '30 2 * * TUE'
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
