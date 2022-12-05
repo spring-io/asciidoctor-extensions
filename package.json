@@ -1,5 +1,5 @@
 {
-  "name": "@opendevise/springio-asciidoctor-extensions",
+  "name": "@springio/asciidoctor-extensions",
   "version": "1.0.0-alpha.3",
   "description": "Asciidoctor.js extensions that support the Spring documentation.",
   "license": "ASL-2.0",
@@ -10,9 +10,9 @@
     "Phil Webb <pwebb@vmware.com>",
     "Andy Wilkinson"
   ],
-  "repository": "github:opendevise/springio-asciidoctor-extensions",
+  "repository": "github:spring-io/asciidoctor-extensions",
   "bugs": {
-    "url": "https://github.com/opendevise/springio-asciidoctor-extensions/issues"
+    "url": "https://github.com/spring-io/asciidoctor-extensions/issues"
   },
   "engines": {
     "node": ">=16.0.0"
@@ -59,7 +59,6 @@
     "chai-fs": "~2.0",
     "chai-spies": "~1.0",
     "dirty-chai": "~2.0",
-    "downdoc": "github:mojavelinux/downdoc",
     "eslint": "~8.27",
     "eslint-config-standard": "~17.0",
     "mocha": "~10.1",
