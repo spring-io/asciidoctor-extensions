@@ -1,4 +1,7 @@
 = Spring Asciidoctor Extensions
+ifdef::env-github[]
+:important-caption: :exclamation:
+endif::[]
 ifdef::env-browser[]
 :toc: right
 :toc-title: Contents
