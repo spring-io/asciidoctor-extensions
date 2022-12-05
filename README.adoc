@@ -52,10 +52,10 @@ The following chomp tags (i.e., comments) are supported:
 |Comment |Description
 
 |/**/
-|Chomps the rest of the line and replaces it with +...+
+|Chomps the rest of the line and replaces it with `\...`
 
 |/* @chomp:line <replacement> */
-|Chomps the rest of the line and replaces it with <replacement>, which defaults to +...+
+|Chomps the rest of the line and replaces it with <replacement>, which defaults to `\...`
 
 |// @chomp:line
 |Chomps (drops) this line only
