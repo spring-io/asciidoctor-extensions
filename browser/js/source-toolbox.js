@@ -1,5 +1,5 @@
-;(function () {
-  'use strict'/*! Spring Asciidoctor Source Toolbox | ASL-2.0 License */
+;(function () { /*! Spring.io Asciidoctor Source Toolbox | ASL-2.0 License */
+  'use strict'
 
   var CMD_RX = /^\$ (\S[^\\\n]*(\\\n(?!\$ )[^\\\n]*)*)(?=\n|$)/gm
   var LINE_CONTINUATION_RX = /( ) *\\\n *|\\\n( ?) */g
