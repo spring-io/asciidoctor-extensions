@@ -59,20 +59,20 @@ You can also turn on chomping of the header (typically a Javadoc comment or lice
 
 The following chomp tags (i.e., comments) are supported:
 
-[%autowidth,cols=~m;~]
+[%autowidth,cols=~;~]
 |===
 |Comment |Description
 
-|/**/
+|`/**/`
 |Chomps the rest of the line and replaces it with `\...`
 
-|/* @chomp:line <replacement> */
+|`/* @chomp:line <replacement> */`
 |Chomps the rest of the line and replaces it with <replacement>, which defaults to `\...`
 
-|// @chomp:line
+|`// @chomp:line`
 |Chomps (drops) this line only
 
-|// @chomp:file
+|`// @chomp:file`
 |Chomps (drops) this line to the end of the file
 |===
 
@@ -116,7 +116,7 @@ The attribute can be set on the document or the block.
 The document attribute is the default value.
 The attribute value may be one of the following keywords:
 
-[%autowidth,cols=~m;~]
+[%autowidth,cols=~;~]
 |===
 |Flag |Description
 
@@ -232,7 +232,7 @@ The attribute can be used on the document or the block.
 The document attribute is the default value.
 The attribute value may be one of the following keywords:
 
-[%autowidth,cols=~m;~]
+[%autowidth,cols=~;~]
 |===
 |Flag |Description
 
