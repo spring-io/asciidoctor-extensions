@@ -39,6 +39,7 @@
     "./tabs-migration-antora-extension": "./lib/tabs-migration-antora-extension.js",
     "./code-chomping-extension": "./lib/code-chomping-extension.js",
     "./code-folding-extension": "./lib/code-folding-extension.js",
+    "./code-import-extension": "./lib/code-import-extension.js",
     "./browser/css/source-toolbox.css": "./browser/css/source-toolbox.css"
   },
   "imports": {
@@ -55,6 +56,7 @@
   ],
   "devDependencies": {
     "@asciidoctor/core": "latest",
+    "@asciidoctor/tabs": "latest",
     "chai": "~4.3",
     "chai-fs": "~2.0",
     "chai-spies": "~1.0",

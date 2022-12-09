@@ -252,6 +252,56 @@ The attribute value may be one of the following keywords:
 |Fold `@fold:on` / `@fold:off` tags
 |===
 
+=== Code Import
+
+*require name:* @springio/asciidoctor-extensions/code-import-extension
+
+The code import extension provides the `import` block macro.
+This macro generates code blocks by importing autodiscovered code files in one or more languages from preconfigured locations.
+The location is defined first by an AsciiDoc attribute, then by the ID of the parent section (if present).
+The ID is converted to a path by removing all `-` characters and replacing all `.` characters with `/`.
+When searching, the extension appends the appropriate file extension for each configured language.
+
+Consider the following AsciiDoc source:
+
+[,asciidoc]
+----
+[[my.example-project]]
+== My Example Project
+
+import::code:SomeCode[]
+----
+
+If the `import-java` attribute is defined, this `import` block macro will look for the Java file at the location `$\{import-java}/my/exampleproject/SomeCode.java`.
+It will then create a code (i.e., source) block with the language `java` that contains the contents of this file.
+The `code:` prefix in the macro target is optional.
+
+The following languages are supported by convention based imports:
+
+[%autowidth,cols=~;~;~]
+|===
+|Language |Root Directory Attribute| File Extension
+
+|Java
+|import-java
+|.java
+
+|Kotlin
+|import-kotlin
+|.kt
+
+|Groovy
+|import-groovy
+|.groovy
+|===
+
+For backwards compatibility, the extension supports the alternate attribute name pattern `docs-<lang>`.
+
+A code block will be created for a matching file in each configured language.
+If more than one file is found, and Asciidoctor Tabs are enabled, the code blocks will automatically be enclosed in a tabs block.
+
+If no files are found, the extension will log a warning.
+
 == Antora Extensions
 
 This section documents the auxiliary Antora extensions that are provided by this library.

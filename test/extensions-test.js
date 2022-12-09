@@ -8,8 +8,27 @@ const { name: packageName } = require('#package')
 describe('extensions', () => {
   const ext = require(packageName)
 
+  let contentCatalog, file
+
+  const createContentCatalog = () => ({
+    files: [],
+    resolveResource (ref, context, defaultFamily, permittedFamilies) {
+      const [family, relative] = ref.split('$')
+      if (!permittedFamilies.includes(family)) return
+      return this.files.find(
+        ({ src: candidate }) =>
+          candidate.relative === relative &&
+          candidate.family === family &&
+          candidate.component === context.component &&
+          candidate.version === context.version &&
+          candidate.module === context.module
+      )
+    },
+  })
+
   const run = (input = [], opts = {}) => {
-    opts.extension_registry = ext.register(opts.extension_registry || Asciidoctor.Extensions.create())
+    const context = { file, contentCatalog }
+    opts.extension_registry = ext.register(opts.extension_registry || Asciidoctor.Extensions.create(), context)
     return Asciidoctor.load(input, opts)
   }
 
@@ -24,10 +43,11 @@ describe('extensions', () => {
         ext.register.call(Asciidoctor.Extensions)
         const extGroups = Asciidoctor.Extensions.getGroups()
         const extGroupKeys = Object.keys(extGroups)
-        expect(extGroupKeys).to.have.lengthOf(1)
+        expect(extGroupKeys).to.eql(['springio'])
         expect(extGroups[extGroupKeys[0]]).to.be.instanceOf(Function)
         const extensions = Asciidoctor.load([]).getExtensions()
         expect(extensions.getTreeProcessors()).to.have.lengthOf(2)
+        expect(extensions.hasBlockMacros()).to.be.false()
       } finally {
         Asciidoctor.Extensions.unregisterAll()
       }
@@ -36,17 +56,13 @@ describe('extensions', () => {
     it('should be able to call register function exported by extension', () => {
       const extensions = run().getExtensions()
       expect(extensions.getTreeProcessors()).to.have.lengthOf(2)
+      expect(extensions.getBlockMacros()).to.have.lengthOf(1)
     })
   })
 
-  describe('chomp and fold code', () => {
-    it('should chomp source and add fold blocks to converted content', () => {
-      const input = heredoc`
-      :chomp: all
-      :fold: all
-
-      [,java]
-      ----
+  describe('import, chomp, and fold code', () => {
+    it('should import code, chomp source, and add fold blocks to converted content', () => {
+      const inputSource = heredoc`
       /*
        * Copyright 2012-2021 the original author or authors.
        */
@@ -92,7 +108,29 @@ describe('extensions', () => {
         }
         // @fold:off
       }
-      ----
+      `
+
+      file = {
+        src: {
+          component: 'spring-security',
+          version: '6.0.0',
+          module: 'ROOT',
+          family: 'page',
+          relative: 'index.adoc',
+        },
+      }
+      contentCatalog = createContentCatalog()
+      contentCatalog.files.push({
+        contents: Buffer.from(inputSource),
+        src: { ...file.src, family: 'example', relative: 'java/SampleServletApplication.java' },
+      })
+
+      const input = heredoc`
+      :docs-java: example$java
+      :chomp: all
+      :fold: all
+
+      import::code:SampleServletApplication[]
       `
 
       const expectedSource = heredoc`
