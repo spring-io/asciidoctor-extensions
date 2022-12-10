@@ -10,9 +10,20 @@ For a detailed view of what's changed, refer to the {url-repo}/commits[commit hi
 
 * Add Asciidoctor code import extension
 
+=== Fixed
+
+* Register each extension as an extension group
+* Update license comment in browser files
+
 == 1.0.0-alpha.4 (2022-12-06)
 
-_No changes since previous release._
+=== Added
+
+* Add development quickstart to README
+
+=== Changed
+
+* Relocate package from `@opendevise/springio-asciidoctor-extensions` to `@springio/asciidoctor-extensions`
 
 == 1.0.0-alpha.3 (2022-12-02)
 
