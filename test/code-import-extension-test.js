@@ -118,7 +118,8 @@ describe('code-import-extension', () => {
       const expectedSource = heredoc`
       fun main(args : Array<String>) {
         println("Hello, World!")
-      }`
+      }
+      `
       const expectedAttrs = { style: 'source', language: 'kotlin' }
       addExample('kotlin/hello.kt', expectedSource)
       const input = 'import::code:hello[]'
@@ -132,7 +133,8 @@ describe('code-import-extension', () => {
       const expectedSource = heredoc`
       fun main(args : Array<String>) {
         println("Hello, World!")
-      }`
+      }
+      `
       const expectedAttrs = { style: 'source', language: 'kotlin' }
       addExample('kotlin/hello.kt', expectedSource)
       const input = 'import::code:hello[]'
@@ -153,7 +155,8 @@ describe('code-import-extension', () => {
         heredoc`
         fun main(args : Array<String>) {
           println("Hello, World!")
-        }`
+        }
+        `
       )
       addExample(
         'java/hello.java',
@@ -162,7 +165,8 @@ describe('code-import-extension', () => {
           public static void main (String[] args) {
             System.out.println("Hello, World!");
           }
-        }`
+        }
+        `
       )
       addExample('groovy/hello.groovy', 'println "Hello, World!"')
       const input = 'import::code:hello[]'
@@ -185,7 +189,8 @@ describe('code-import-extension', () => {
         heredoc`
         fun main(args : Array<String>) {
           println("Hello, World!")
-        }`
+        }
+        `
       )
       addExample(
         'java/hello.java',
@@ -194,7 +199,8 @@ describe('code-import-extension', () => {
           public static void main (String[] args) {
             System.out.println("Hello, World!");
           }
-        }`
+        }
+        `
       )
       addExample('groovy/hello.groovy', 'println "Hello, World!"')
       const input = 'import::code:hello[]'
@@ -220,7 +226,8 @@ describe('code-import-extension', () => {
         heredoc`
         fun main(args : Array<String>) {
          println("Hello, World!")
-        }`
+        }
+        `
       )
       const input = 'import::code:hello[]'
       const actual = run(input, { attributes: { 'docs-kotlin': 'example$kotlin', 'docs-ruby': 'example$ruby' } })
@@ -232,7 +239,8 @@ describe('code-import-extension', () => {
       const expectedSource = heredoc`
       fun main(args : Array<String>) {
         println("Hello, World!")
-      }`
+      }
+      `
       const expectedAttrs = { style: 'source', language: 'kotlin' }
       addExample('kotlin/hello.kt', expectedSource)
       const input = 'import::code:hello[]'
@@ -264,7 +272,8 @@ describe('code-import-extension', () => {
 
       import::code:hello[]
 
-      after`
+      after
+      `
       withMemoryLogger((logger) => {
         run(input)
         const messages = logger.getMessages()
@@ -278,7 +287,8 @@ describe('code-import-extension', () => {
       const expectedSource = heredoc`
       fun main(args : Array<String>) {
         println("Hello, World!")
-      }`
+      }
+      `
       addExample('kotlin/org/spring/sampleproject/hello.kt', expectedSource)
       const input = heredoc`
       = Page Title
@@ -297,7 +307,8 @@ describe('code-import-extension', () => {
       const expectedSource = heredoc`
       fun main(args : Array<String>) {
         println("Hello, World!")
-      }`
+      }
+      `
       addExample('kotlin/hello.kt', expectedSource)
       const input = 'import::hello[]'
       const actual = run(input)
