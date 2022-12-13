@@ -56,6 +56,8 @@
     "extension"
   ],
   "devDependencies": {
+    "@antora/asciidoc-loader": "latest",
+    "@antora/logger": "latest",
     "@asciidoctor/core": "latest",
     "@asciidoctor/tabs": "latest",
     "chai": "~4.3",

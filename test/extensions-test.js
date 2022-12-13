@@ -2,6 +2,8 @@
 'use strict'
 
 const Asciidoctor = require('@asciidoctor/core')()
+const { configureLogger } = require('@antora/logger')
+const loadAsciiDoc = require('@antora/asciidoc-loader')
 const { expect, heredoc } = require('./harness')
 const { name: packageName } = require('#package')
 
@@ -12,25 +14,34 @@ describe('extensions', () => {
 
   const createContentCatalog = () => ({
     files: [],
-    resolveResource (ref, context, defaultFamily, permittedFamilies) {
-      const [family, relative] = ref.split('$')
-      if (!permittedFamilies.includes(family)) return
+    getById ({ component, version, module, family, relative }) {
       return this.files.find(
         ({ src: candidate }) =>
           candidate.relative === relative &&
           candidate.family === family &&
-          candidate.component === context.component &&
-          candidate.version === context.version &&
-          candidate.module === context.module
+          candidate.component === component &&
+          candidate.version === version &&
+          candidate.module === module
       )
+    },
+    getComponent: () => undefined,
+    resolveResource (ref, context, defaultFamily, permittedFamilies) {
+      const [family, relative] = ref.split('$')
+      if (!permittedFamilies.includes(family)) return
+      return this.getById(Object.assign({}, context, { family, relative }))
     },
   })
 
   const run = (input = [], opts = {}) => {
-    const context = { file, contentCatalog }
-    opts.extension_registry = ext.register(opts.extension_registry || Asciidoctor.Extensions.create(), context)
-    return Asciidoctor.load(input, opts)
+    opts.extensions = [ext]
+    const inputFile = { ...file, contents: Buffer.from(input) }
+    return loadAsciiDoc(inputFile, contentCatalog, opts)
   }
+
+  beforeEach(() => {
+    contentCatalog = createContentCatalog()
+    configureLogger()
+  })
 
   describe('bootstrap', () => {
     it('should be able to require extension', () => {
@@ -54,7 +65,10 @@ describe('extensions', () => {
     })
 
     it('should be able to call register function exported by extension', () => {
-      const extensions = run().getExtensions()
+      const context = { file, contentCatalog }
+      const opts = {}
+      opts.extension_registry = ext.register(opts.extension_registry || Asciidoctor.Extensions.create(), context)
+      const extensions = Asciidoctor.load([], opts).getExtensions()
       expect(extensions.getTreeProcessors()).to.have.lengthOf(2)
       expect(extensions.getBlockMacros()).to.have.lengthOf(1)
     })
@@ -118,8 +132,8 @@ describe('extensions', () => {
           family: 'page',
           relative: 'index.adoc',
         },
+        pub: { moduleRootPath: '' },
       }
-      contentCatalog = createContentCatalog()
       contentCatalog.files.push({
         contents: Buffer.from(inputSource),
         src: { ...file.src, family: 'example', relative: 'java/SampleServletApplication.java' },
