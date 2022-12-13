@@ -5,6 +5,9 @@ process.env.NODE_ENV = 'test'
 
 const chai = require('chai')
 const fsp = require('node:fs/promises')
+const http = require('http')
+const ospath = require('path')
+const { once } = require('events')
 
 chai.use(require('chai-fs'))
 chai.use(require('chai-spies'))
@@ -14,6 +17,8 @@ chai.use(require('dirty-chai'))
 
 const cleanDir = (dir, { create } = {}) =>
   fsp.rm(dir, { recursive: true, force: true }).then(() => (create ? fsp.mkdir(dir, { recursive: true }) : undefined))
+
+const filterLines = (str, predicate) => str.split('\n').filter(predicate).join('\n')
 
 const heredoc = (literals, ...vals) => {
   const str = literals
@@ -43,6 +48,36 @@ const heredoc = (literals, ...vals) => {
   return (indentSize ? lines.map((l) => (l.charAt() === ' ' ? l.slice(indentSize) : l)) : lines).join('')
 }
 
-const filterLines = (str, predicate) => str.split('\n').filter(predicate).join('\n')
+const startWebServer = (hostname, rootDir) => {
+  const contentTypes = {}
+  const httpServer = http.createServer((request, response) => {
+    fsp.readFile(ospath.join(rootDir, request.url)).then(
+      (content) => {
+        const ext = ospath.extname(request.url)
+        response.writeHead(200, { 'Content-Type': contentTypes[ext] || `application/${ext.slice(1)}` })
+        response.end(content)
+      },
+      () => {
+        response.writeHead(404, { 'Content-Type': 'text/html' })
+        response.end('<!DOCTYPE html><html><body>Not Found</body></html>', 'utf8')
+      }
+    )
+  })
+  return once(httpServer.listen(0), 'listening').then(() => {
+    httpServer.shutdown = function () {
+      return once(this.close() || this, 'close')
+    }.bind(httpServer)
+    return [httpServer, new URL(`http://${hostname}:${httpServer.address().port}`).toString().slice(0, -1)]
+  })
+}
 
-module.exports = { cleanDir, expect: chai.expect, filterLines, heredoc, spy: chai.spy }
+// NOTE async keyword only needed on fn declaration if the function it calls does not always return a Promise
+const trapAsyncError = (fn) =>
+  fn().then(
+    (returnValue) => () => returnValue,
+    (err) => () => {
+      throw err
+    }
+  )
+
+module.exports = { cleanDir, expect: chai.expect, filterLines, heredoc, spy: chai.spy, startWebServer, trapAsyncError }

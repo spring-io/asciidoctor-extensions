@@ -304,13 +304,46 @@ If no files are found, the extension will log a warning.
 
 == Antora Extensions
 
+In addition to Asciidoctor extensions, this library also provides several Antora extensions.
 This section documents the auxiliary Antora extensions that are provided by this library.
+
+=== Partial Build
+
+*require name:* @springio/asciidoctor-extensions/partial-build-antora-extension
+
+The purpose of this extension is to reconfigure Antora to run a partial build, if possible.
+A partial build is build that only generates a site from a single refname, and hence a single version.
+The complete version inventory, as well as references to resources in other versions, are resolved from the site manifest produced by the Antora Atlas extension.
+Once the partial build is complete, the assumption is that the files generated will synchronized with the full site.
+
+If a request is made to build a version which has not already been published, or the prerelease status of that version has changed since the last full build, the extension will revert to a full build.
+It will also generate a [.path]_.full-build_ file in the output directory as a hint to the sync script that a full build has occurred.
+
+The extension accepts several configuration options:
+
+refname (required)::
+The single refname to build (e.g., main).
+May be provided by the `BUILD_REFNAME` environment variable.
+
+version::
+The documentation version that corresponds to the refname.
+This information is used to determine if the version provided by the refname is present in the site manifest.
+May be provided by the `BUILD_VERSION` environment variable.
+If not specified, the version will be retrieved from the [.path]_gradle.properties_ file at the root of the repository at the specified refname.
+Ideally, this option should be set by the workflow that invokes the partial build.
+
+rawgit_url (default: \https://raw.githubusercontent.com)::
+The base URL to use to retrieve a file from the git repository.
+This lookup happens when the version is not specified.
+
+By default, the site manifest will be retrieved from `\{site-url}/site-manifest.json`, where `site-url` is the value of the `site.url` key in the playbook (i.e., the production site URL).
+You can configure this extension (and, in turn, Antora Atlas) to use a different site manifest by passing the `primary-site-manifest-url` AsciiDoc attribute.
+This attribute can be set in the playbook.
 
 === Tabs Migration
 
 *require name:* @springio/asciidoctor-extensions/tabs-migration-antora-extension
 
-In addition to Asciidoctor extensions, this library also provides one Antora extension.
 The purpose of this extension is to migrate the AsciiDoc source from using Spring tabs to using https://github.com/asciidoctor/asciidoctor-tabs[Asciidoctor tabs].
 It also has the ability to unwrap unneeded example blocks.
 

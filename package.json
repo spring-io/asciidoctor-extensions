@@ -36,6 +36,7 @@
   },
   "exports": {
     ".": "./lib/index.js",
+    "./partial-build-antora-extension": "./lib/partial-build-antora-extension.js",
     "./tabs-migration-antora-extension": "./lib/tabs-migration-antora-extension.js",
     "./code-chomping-extension": "./lib/code-chomping-extension.js",
     "./code-folding-extension": "./lib/code-folding-extension.js",
@@ -65,7 +66,8 @@
     "eslint-config-standard": "~17.0",
     "mocha": "~10.1",
     "nyc": "~15.1",
-    "prettier-eslint": "~15.0"
+    "prettier-eslint": "~15.0",
+    "simple-get": "latest"
   },
   "nyc": {
     "cache": true,
