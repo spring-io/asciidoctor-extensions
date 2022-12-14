@@ -270,7 +270,7 @@ Consider the following AsciiDoc source:
 include-code::SomeCode[]
 ----
 
-If the `include-java` attribute is defined, the `include-code` block macro will look for the Java file at the location `$\{include-java}/my/exampleproject/SomeCode.java`.
+If the `include-java` attribute is defined, the `include-code` block macro will look for the Java file at the location `\{include-java}/my/exampleproject/SomeCode.java`.
 It will then create a source block with the language `java` that contains the contents of this file.
 
 The following languages are supported by convention based imports:
