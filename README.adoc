@@ -1,4 +1,4 @@
-= Spring Asciidoctor Extensions
+= Spring.io Asciidoctor Extensions
 ifdef::env-github[]
 :important-caption: :exclamation:
 endif::[]
@@ -299,76 +299,6 @@ A code block will be created for a matching file in each configured language.
 If more than one file is found, and Asciidoctor Tabs are enabled, the code blocks will automatically be enclosed in a tabs block.
 
 If no files are found, the extension will log a warning.
-
-== Antora Extensions
-
-In addition to Asciidoctor extensions, this library also provides several Antora extensions.
-This section documents the auxiliary Antora extensions that are provided by this library.
-
-=== Partial Build
-
-*require name:* @springio/asciidoctor-extensions/partial-build-antora-extension
-
-The purpose of this extension is to reconfigure Antora to run a partial build, if possible.
-A partial build is build that only generates a site from a single refname, and hence a single version.
-The complete version inventory, as well as references to resources in other versions, are resolved from the site manifest produced by the Antora Atlas extension.
-Once the partial build is complete, the assumption is that the files generated will synchronized with the full site.
-
-If a request is made to build a version which has not already been published, or the prerelease status of that version has changed since the last full build, the extension will revert to a full build.
-It will also generate a [.path]_.full-build_ file in the output directory as a hint to the sync script that a full build has occurred.
-
-The extension accepts several configuration options:
-
-refname (required)::
-The single refname to build (e.g., main).
-May be provided by the `BUILD_REFNAME` environment variable.
-
-version::
-The documentation version that corresponds to the refname.
-This information is used to determine if the version provided by the refname is present in the site manifest.
-May be provided by the `BUILD_VERSION` environment variable.
-If not specified, the version will be retrieved from the [.path]_gradle.properties_ file at the root of the repository at the specified refname.
-Ideally, this option should be set by the workflow that invokes the partial build.
-
-rawgit_url (default: \https://raw.githubusercontent.com)::
-The base URL to use to retrieve a file from the git repository.
-This lookup happens when the version is not specified.
-
-By default, the site manifest will be retrieved from `\{site-url}/site-manifest.json`, where `site-url` is the value of the `site.url` key in the playbook (i.e., the production site URL).
-You can configure this extension (and, in turn, Antora Atlas) to use a different site manifest by passing the `primary-site-manifest-url` AsciiDoc attribute.
-This attribute can be set in the playbook.
-
-=== Tabs Migration
-
-*require name:* @springio/asciidoctor-extensions/tabs-migration-antora-extension
-
-The purpose of this extension is to migrate the AsciiDoc source from using Spring tabs to using https://github.com/asciidoctor/asciidoctor-tabs[Asciidoctor tabs].
-It also has the ability to unwrap unneeded example blocks.
-
-IMPORTANT: Be sure to register this extension under the `antora.extensions` key in the playbook, not the `asciidoc.extensions` key!
-
-The extension accepts several configuration options:
-
-save_result (default: false)::
-A boolean option that controls whether the migrated source is written back to the worktree.
-This option is only relevant when the file is read from a local directory, which is the case for git references that have an associated worktree.
-
-unwrap_example_block (default: tabs)::
-An enumeration option that controls when example block delimiters are removed.
-
-* `never` - Never remove example block delimiters
-* `tabs` - Migrate example block that contains tabs to a tabs block
-* `always` - Remove example block delimiters if example block has no metadata and only contains a single child
-
-tabs_delimiter_length (default: 6)::
-An integer option that controls the length of the delimiter for a tabs block.
-The recommended value is 6.
-You can also set it to 4 to use the conventional length.
-
-normalize (default: false)::
-A boolean option that controls whether sequential empty lines are collapsed into a single empty line.
-Regardless of the value of this option, the extension will relocate block metadata lines to be directly above the block.
-The extension will also insert an empty line between tabs if one does not exist.
 
 ifndef::env-npm[]
 == Development Quickstart
