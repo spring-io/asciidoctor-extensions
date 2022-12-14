@@ -140,11 +140,11 @@ describe('extensions', () => {
       })
 
       const input = heredoc`
-      :docs-java: example$java
+      :include-java: example$java
       :chomp: all
       :fold: all
 
-      import::code:SampleServletApplication[]
+      include-code::SampleServletApplication[]
       `
 
       const expectedSource = heredoc`

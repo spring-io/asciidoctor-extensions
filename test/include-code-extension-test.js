@@ -7,8 +7,8 @@ const loadAsciiDoc = require('@antora/asciidoc-loader')
 const { expect, heredoc } = require('./harness')
 const { name: packageName } = require('#package')
 
-describe('code-import-extension', () => {
-  const ext = require(packageName + '/code-import-extension')
+describe('include-code-extension', () => {
+  const ext = require(packageName + '/include-code-extension')
 
   const file = {
     src: {
@@ -54,9 +54,9 @@ describe('code-import-extension', () => {
 
   const run = (input = [], opts = {}) => {
     opts.attributes ??= {
-      'import-java': 'example$java',
-      'import-kotlin': 'example$kotlin',
-      'import-groovy': 'example$groovy',
+      'include-java': 'example$java',
+      'include-kotlin': 'example$kotlin',
+      'include-groovy': 'example$groovy',
     }
     opts.extensions = [ext]
     if (opts.registerAsciidoctorTabs) {
@@ -101,15 +101,15 @@ describe('code-import-extension', () => {
       const extensions = run().getExtensions()
       expect(extensions).to.exist()
       expect(extensions.getBlockMacros()).to.have.lengthOf(1)
-      expect(extensions.getBlockMacros()[0].instance.name).to.equal('import')
+      expect(extensions.getBlockMacros()[0].instance.name).to.equal('include-code')
     })
   })
 
-  describe('import code', () => {
-    it('should warn if import macro is found but no import-<lang> attributes are defined', () => {
-      const expectedMessage = 'no search locations defined for import::code:hello[]'
+  describe('include code', () => {
+    it('should warn if include-code block macro is found but no include-<lang> attributes are defined', () => {
+      const expectedMessage = 'no search locations defined for include-code::hello[]'
       const expectedLineno = 1
-      const input = 'import::code:hello[]'
+      const input = 'include-code::hello[]'
       run(input, { attributes: {} })
       expect(messages).to.have.lengthOf(1)
       const message = JSON.parse(messages[0])
@@ -118,7 +118,7 @@ describe('code-import-extension', () => {
       expect(message).to.have.nested.property('file.line', expectedLineno)
     })
 
-    it('should import single code snippet if only one import-<lang> attribute is set', () => {
+    it('should include single code snippet if only one include-<lang> attribute is set', () => {
       const expectedSource = heredoc`
       fun main(args : Array<String>) {
         println("Hello, World!")
@@ -126,14 +126,14 @@ describe('code-import-extension', () => {
       `
       const expectedAttrs = { style: 'source', language: 'kotlin' }
       addExample('kotlin/hello.kt', expectedSource)
-      const input = 'import::code:hello[]'
-      const actual = run(input, { attributes: { 'import-kotlin': 'example$kotlin' } })
+      const input = 'include-code::hello[]'
+      const actual = run(input, { attributes: { 'include-kotlin': 'example$kotlin' } })
       expect(actual.getBlocks()).to.have.lengthOf(1)
       expect(actual.getBlocks()[0].getSource()).to.equal(expectedSource)
       expect(actual.getBlocks()[0].getAttributes()).to.include(expectedAttrs)
     })
 
-    it('should import single code snippet if all import-<lang> attributes are set but only one resource is found', () => {
+    it('should include single code snippet if all include-<lang> attributes are set but only one resource is found', () => {
       const expectedSource = heredoc`
       fun main(args : Array<String>) {
         println("Hello, World!")
@@ -141,14 +141,14 @@ describe('code-import-extension', () => {
       `
       const expectedAttrs = { style: 'source', language: 'kotlin' }
       addExample('kotlin/hello.kt', expectedSource)
-      const input = 'import::code:hello[]'
+      const input = 'include-code::hello[]'
       const actual = run(input)
       expect(actual.getBlocks()).to.have.lengthOf(1)
       expect(actual.getBlocks()[0].getSource()).to.equal(expectedSource)
       expect(actual.getBlocks()[0].getAttributes()).to.include(expectedAttrs)
     })
 
-    it('should import multiple code snippets if all import-<lang> attributes are set and multiple resources are found', () => {
+    it('should include multiple code snippets if all include-<lang> attributes are set and multiple resources are found', () => {
       const expected = [
         { style: 'source', language: 'java', title: 'Java' },
         { style: 'source', language: 'kotlin', title: 'Kotlin' },
@@ -173,7 +173,7 @@ describe('code-import-extension', () => {
         `
       )
       addExample('groovy/hello.groovy', 'println "Hello, World!"')
-      const input = 'import::code:hello[]'
+      const input = 'include-code::hello[]'
       const actual = run(input).findBy({ context: 'listing' })
       expect(actual).to.have.lengthOf(3)
       const actualProperties = actual.map((block) => {
@@ -182,7 +182,7 @@ describe('code-import-extension', () => {
       expect(actualProperties).to.eql(expected)
     })
 
-    it('should support title attribute on block macro with single import', () => {
+    it('should support title attribute on block macro with single include', () => {
       const inputSource = heredoc`
       fun main(args : Array<String>) {
         println("Hello, World!")
@@ -191,14 +191,14 @@ describe('code-import-extension', () => {
       addExample('kotlin/hello.kt', inputSource)
       const input = heredoc`
       .Describe This
-      import::code:hello[]
+      include-code::hello[]
       `
-      const actual = run(input, { attributes: { 'import-kotlin': 'example$kotlin' } })
+      const actual = run(input, { attributes: { 'include-kotlin': 'example$kotlin' } })
       expect(actual.getBlocks()).to.have.lengthOf(1)
       expect(actual.getBlocks()[0].getTitle()).to.equal('Describe This')
     })
 
-    it('should support title attribute on block macro with multiple imports', () => {
+    it('should support title attribute on block macro with multiple includes', () => {
       addExample(
         'kotlin/hello.kt',
         heredoc`
@@ -219,7 +219,7 @@ describe('code-import-extension', () => {
       )
       const input = heredoc`
       .Describe This
-      import::code:hello[]
+      include-code::hello[]
       `
       const actual = run(input)
       expect(actual.getBlocks()).to.have.lengthOf(2)
@@ -227,7 +227,7 @@ describe('code-import-extension', () => {
       expect(actual.getBlocks()[1].getTitle()).to.equal('Describe This - Kotlin')
     })
 
-    it('should support attributes on include directive of imported file', () => {
+    it('should support attributes on include directive of included file', () => {
       const inputSource = heredoc`
       fun main(args : Array<String>) {
         // tag::print[]
@@ -238,8 +238,8 @@ describe('code-import-extension', () => {
       const expectedSource = 'println("Hello, World!")'
       const expectedAttrs = { style: 'source', language: 'kotlin' }
       addExample('kotlin/hello.kt', inputSource)
-      const input = 'import::code:hello[tag=print,indent=0]'
-      const actual = run(input, { attributes: { 'import-kotlin': 'example$kotlin' } })
+      const input = 'include-code::hello[tag=print,indent=0]'
+      const actual = run(input, { attributes: { 'include-kotlin': 'example$kotlin' } })
       expect(actual.getBlocks()).to.have.lengthOf(1)
       expect(actual.getBlocks()[0].getSource()).to.equal(expectedSource)
       expect(actual.getBlocks()[0].getAttributes()).to.include(expectedAttrs)
@@ -260,11 +260,11 @@ describe('code-import-extension', () => {
       const input = heredoc`
       before
 
-      import::code:hello[tag=no-such-tag,indent=0]
+      include-code::hello[tag=no-such-tag,indent=0]
 
       after
       `
-      const actual = run(input, { attributes: { 'import-kotlin': 'example$kotlin' } })
+      const actual = run(input, { attributes: { 'include-kotlin': 'example$kotlin' } })
       expect(actual.getBlocks()).to.have.lengthOf(3)
       expect(actual.getBlocks()[1].getSource()).to.equal(expectedSource)
       expect(actual.getBlocks()[1].getAttributes()).to.include(expectedAttrs)
@@ -302,7 +302,7 @@ describe('code-import-extension', () => {
         `
       )
       addExample('groovy/hello.groovy', 'println "Hello, World!"')
-      const input = 'import::code:hello[]'
+      const input = 'include-code::hello[]'
       const doc = run(input, { registerAsciidoctorTabs: true })
       const tabs = doc.getBlocks()[0]
       expect(tabs).to.exist()
@@ -340,7 +340,7 @@ describe('code-import-extension', () => {
       )
       const input = heredoc`
       .Tabs Title
-      import::code:hello[]
+      include-code::hello[]
       `
       const doc = run(input, { registerAsciidoctorTabs: true })
       const tabs = doc.getBlocks()[0]
@@ -353,7 +353,7 @@ describe('code-import-extension', () => {
       }
     })
 
-    it('should not import code for unsupported language, even if import-<lang> is defined', () => {
+    it('should not include code for unsupported language, even if include-<lang> is defined', () => {
       addExample('ruby/hello.rb', 'puts "Hello, World!"')
       addExample(
         'kotlin/hello.kt',
@@ -363,31 +363,16 @@ describe('code-import-extension', () => {
         }
         `
       )
-      const input = 'import::code:hello[]'
-      const actual = run(input, { attributes: { 'docs-kotlin': 'example$kotlin', 'docs-ruby': 'example$ruby' } })
+      const input = 'include-code::hello[]'
+      const actual = run(input, { attributes: { 'include-kotlin': 'example$kotlin', 'include-ruby': 'example$ruby' } })
       expect(actual.getBlocks()).to.have.lengthOf(1)
       expect(actual.getBlocks()[0].getAttributes().language).to.equal('kotlin')
     })
 
-    it('should support docs-<lang> as an alternative attribute name pattern to import-<lang>', () => {
-      const expectedSource = heredoc`
-      fun main(args : Array<String>) {
-        println("Hello, World!")
-      }
-      `
-      const expectedAttrs = { style: 'source', language: 'kotlin' }
-      addExample('kotlin/hello.kt', expectedSource)
-      const input = 'import::code:hello[]'
-      const actual = run(input, { attributes: { 'docs-kotlin': 'example$kotlin' } })
-      expect(actual.getBlocks()).to.have.lengthOf(1)
-      expect(actual.getBlocks()[0].getSource()).to.equal(expectedSource)
-      expect(actual.getBlocks()[0].getAttributes()).to.include(expectedAttrs)
-    })
-
-    it('should warn if at least one import-<lang> attribute is set but no resources are found', () => {
-      const expectedMessage = 'no code imports found for hello'
+    it('should warn if at least one include-<lang> attribute is set but no resources are found', () => {
+      const expectedMessage = 'no code includes found for hello'
       const expectedLineno = 1
-      const input = 'import::code:hello[]'
+      const input = 'include-code::hello[]'
       const actual = run(input)
       expect(actual.getBlocks()).to.be.empty()
       expect(messages).to.have.lengthOf(1)
@@ -402,7 +387,7 @@ describe('code-import-extension', () => {
       const input = heredoc`
       before
 
-      import::code:hello[]
+      include-code::hello[]
 
       after
       `
@@ -426,7 +411,7 @@ describe('code-import-extension', () => {
       [[org.spring.sample-project]]
       == Section Title
 
-      import::code:hello[]
+      include-code::hello[]
       `
       const actual = run(input)
       expect(actual.findBy({ context: 'listing' })).to.have.lengthOf(1)
@@ -444,7 +429,7 @@ describe('code-import-extension', () => {
       [[org.spring.sample-project]]
       = Page Title
 
-      import::code:hello[]
+      include-code::hello[]
       `
       const actual = run(input)
       expect(actual.findBy({ context: 'listing' })).to.have.lengthOf(1)
@@ -461,21 +446,21 @@ describe('code-import-extension', () => {
       const input = heredoc`
       = Page Title
 
-      import::code:hello[]
+      include-code::hello[]
       `
       const actual = run(input)
       expect(actual.findBy({ context: 'listing' })).to.have.lengthOf(1)
       expect(actual.findBy({ context: 'listing' })[0].getSource()).to.equal(expectedSource)
     })
 
-    it('should not require target to be prefixed with code:', () => {
+    it('should preserve case in target', () => {
       const expectedSource = heredoc`
       fun main(args : Array<String>) {
         println("Hello, World!")
       }
       `
-      addExample('kotlin/hello.kt', expectedSource)
-      const input = 'import::hello[]'
+      addExample('kotlin/HelloWorld.kt', expectedSource)
+      const input = 'include-code::HelloWorld[]'
       const actual = run(input)
       expect(actual.getBlocks()).to.have.lengthOf(1)
       expect(actual.getBlocks()[0].getSource()).to.equal(expectedSource)

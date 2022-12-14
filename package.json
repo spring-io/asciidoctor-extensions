@@ -38,7 +38,7 @@
     ".": "./lib/index.js",
     "./code-chomping-extension": "./lib/code-chomping-extension.js",
     "./code-folding-extension": "./lib/code-folding-extension.js",
-    "./code-import-extension": "./lib/code-import-extension.js",
+    "./include-code-extension": "./lib/include-code-extension.js",
     "./browser/css/source-toolbox.css": "./browser/css/source-toolbox.css"
   },
   "imports": {
