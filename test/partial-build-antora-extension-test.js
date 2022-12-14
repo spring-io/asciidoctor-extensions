@@ -8,7 +8,7 @@ const { name: packageName } = require('#package')
 const FIXTURES_DIR = ospath.join(__dirname, 'fixtures')
 const WORK_DIR = ospath.join(__dirname, 'work')
 
-describe('tabs-migration-antora-extension', () => {
+describe('partial-build-antora-extension', () => {
   const ext = require(packageName + '/partial-build-antora-extension')
 
   const createGeneratorContext = () => ({
