@@ -54,9 +54,9 @@ describe('include-code-extension', () => {
 
   const run = (input = [], opts = {}) => {
     opts.attributes ??= {
-      'include-java': 'example$java',
-      'include-kotlin': 'example$kotlin',
-      'include-groovy': 'example$groovy',
+      'include-java@': 'example$java',
+      'include-kotlin@': 'example$kotlin',
+      'include-groovy@': 'example$groovy',
     }
     opts.extensions = [ext]
     if (opts.registerAsciidoctorTabs) {
@@ -351,6 +351,35 @@ describe('include-code-extension', () => {
       for (const block of codeBlocks) {
         expect(block.getTitle()).to.be.undefined()
       }
+    })
+
+    it('should not include code if include-<lang> is defined, even if file is present', () => {
+      addExample(
+        'kotlin/hello.kt',
+        heredoc`
+        fun main(args : Array<String>) {
+          println("Hello, World!")
+        }
+        `
+      )
+      addExample(
+        'java/hello.java',
+        heredoc`
+        public class Hello {
+          public static void main (String[] args) {
+            System.out.println("Hello, World!");
+          }
+        }
+        `
+      )
+      const input = heredoc`
+      :!include-java:
+
+      include-code::hello[]
+      `
+      const actual = run(input)
+      expect(actual.getBlocks()).to.have.lengthOf(1)
+      expect(actual.getBlocks()[0].getAttributes().language).to.equal('kotlin')
     })
 
     it('should not include code for unsupported language, even if include-<lang> is defined', () => {
