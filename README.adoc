@@ -40,8 +40,6 @@ ifndef::env-npm[]
 To use the development version instead, refer to the <<Development Quickstart>>.
 
 endif::[]
-The following two sections introduce the extensions provided by this library and how to activate them.
-
 == Extensions
 
 This section documents the Asciidoctor extensions that are provided by this library.
@@ -488,7 +486,7 @@ If you want to use the project locally before it is published, you can specify t
 ----
 
 When you run `npm i` in that project, npm will set up a symlink to the location of this project.
-Any changes to this project will take affect immediately.
+Any changes to this project will take effect immediately.
 
 endif::[]
 == License
