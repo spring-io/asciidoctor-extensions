@@ -47,7 +47,7 @@ describe('include-code-extension', () => {
     getComponent: () => undefined,
     resolveResource (ref, context, defaultFamily, permittedFamilies) {
       const [family, relative] = ref.split('$')
-      if (!permittedFamilies.includes(family)) return
+      if (permittedFamilies && !permittedFamilies.includes(family)) return
       return this.getById(Object.assign({}, context, { family, relative }))
     },
   })
@@ -196,6 +196,29 @@ describe('include-code-extension', () => {
       const actual = run(input, { attributes: { 'include-kotlin': 'example$kotlin' } })
       expect(actual.getBlocks()).to.have.lengthOf(1)
       expect(actual.getBlocks()[0].getTitle()).to.equal('Describe This')
+    })
+
+    it('should report correct line number in warning for block title', () => {
+      const inputSource = heredoc`
+      fun main(args : Array<String>) {
+        println("Hello, World!")
+      }
+      `
+      addExample('kotlin/hello.kt', inputSource)
+      const input = heredoc`
+      before
+
+      .xref:no-such-file.adoc[]
+      include-code::hello[]
+
+      after
+      `
+      const actual = run(input, { attributes: { 'include-kotlin': 'example$kotlin' }, sourcemap: true })
+      expect(actual.getBlocks()[1].getTitle()).to.include('unresolved')
+      expect(messages).to.have.lengthOf(1)
+      const message = JSON.parse(messages[0])
+      expect(message.msg).to.equal('target of xref not found: no-such-file.adoc')
+      expect(message.file.line).to.equal(4)
     })
 
     it('should support title attribute on block macro with multiple includes', () => {
@@ -482,7 +505,7 @@ describe('include-code-extension', () => {
       expect(actual.findBy({ context: 'listing' })[0].getSource()).to.equal(expectedSource)
     })
 
-    it('should preserve case in target', () => {
+    it('should preserve letter case in target', () => {
       const expectedSource = heredoc`
       fun main(args : Array<String>) {
         println("Hello, World!")
