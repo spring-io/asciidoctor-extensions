@@ -36,10 +36,11 @@
   },
   "exports": {
     ".": "./lib/index.js",
+    "./browser/css/source-toolbox.css": "./browser/css/source-toolbox.css",
     "./code-chomping-extension": "./lib/code-chomping-extension.js",
     "./code-folding-extension": "./lib/code-folding-extension.js",
-    "./include-code-extension": "./lib/include-code-extension.js",
-    "./browser/css/source-toolbox.css": "./browser/css/source-toolbox.css"
+    "./configuration-properties-extension": "./lib/configuration-properties-extension.js",
+    "./include-code-extension": "./lib/include-code-extension.js"
   },
   "imports": {
     "#package": "./package.json"
@@ -53,6 +54,9 @@
     "asciidoctor",
     "extension"
   ],
+  "dependencies": {
+    "js-yaml": "~4.1"
+  },
   "devDependencies": {
     "@antora/asciidoc-loader": "latest",
     "@asciidoctor/core": "latest",

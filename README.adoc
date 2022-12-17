@@ -298,6 +298,202 @@ If Asciidoctor Tabs is not registered in this case, the source blocks will be cr
 
 If none of the supported `include-*` attributes are defined, or if no code files are found for a target at the locations defined by these attributes, the extension will log a warning.
 
+=== Configuration Properties
+
+*require name:* @springio/asciidoctor-extensions/configuration-properties-extension
+
+The configuration properties extensions augments the AsciiDoc syntax to validate and display Spring configuration properties in the documentation.
+Those enhancements are as follows:
+
+<<configprop>>:: The `configprop` inline macro verifies that a configuration property is valid and its deprecation status, then outputs the property name as a monospaced (i.e, code) phrase.
+<<configprops>>:: The `configprops` block is an enhanced source blocks that validates all the configuration properties listed in either the Java properties format or YAML format, then displays the properties as a source (i.e., code) block.
+The block can either output the input format, or, if the input format is YAML, can display tabs containing the properties assignments in both the Java properties format and the YAML format.
+
+This extension loads the Spring configuration properties from [.path]_spring-configuration-metadata.json_ files in the partial family for the current component version (e.g., [.path]_modules/ROOT/partial/spring-boot/spring-configuration-metadata.json_).
+It will aggregate the properties from all matching files into a single lookup table.
+The table is used for validating property names and querying their deprecation status.
+The extension assumes that these files are put into that location by another extension, such as Antora Collector.
+Here's an example Gradle task that can be used with Antora Collector:
+
+[,groovy]
+----
+task collectConfigurationMetadataFiles(type: Copy) {
+  from project.configurations.configurationProperties
+  eachFile {
+    it.path = it.file
+      .toString()
+      .replaceFirst('/build/(?:classes|resources)/java/main/', '/')
+      .replaceFirst('^.*/([^/]+)/META-INF/(spring-configuration-metadata\\.json)$', '$1/$2')
+  }
+  into layout.buildDirectory.dir('generated-docs/modules/ROOT/partials/configuration-metadata')
+}
+----
+
+[#configprop]
+==== configprop inline macro
+
+The `configprop` macro is an inline macro (single colon) that can be used to reference a Spring configuration property.
+The macro outputs the name of the property as monospaced text.
+Here's an example that references the `server.port` configuration property.
+
+[,asciidoc]
+----
+Use the configprop:server.port[] property to configure the server's port.
+----
+
+This property is defined in a Spring configuration metadata file as follows:
+
+[,json]
+----
+{
+  "name": "server.port",
+  "type": "java.lang.Integer",
+  "description": "Server HTTP port.",
+  "sourceType": "org.springframework.boot.autoconfigure.web.ServerProperties",
+  "defaultValue": 8080
+}
+----
+
+If the property does not exist, the extension will log a warning message.
+If the property is deprecated, the extension will log a warning message by default.
+These two validations also apply to the `configprops` block.
+
+If the deprecation is expected, the deprecation message can be suppressed by setting the `deprecated` option on the macro:
+
+[,asciidoc]
+----
+In the old days, you would use configprop:server.servlet.path[opts=deprecated] to set the path of the main dispatcher servlet.
+----
+
+If the deprecated option is specified, but the property is not deprecated, the extension will log a warning.
+
+Instead of outputting the property name itself, you can configure the macro to output the environment variable that maps to the property by setting the `format=envvar` attribute.
+In the following example, the macro outputs the environment variable name `SERVER_PORT` instead of the property name `servlet.port`.
+
+[,asciidoc]
+----
+Use the configprop:server.port[format=envvar] environment variable to configure the server's port.
+----
+
+[#configprops]
+==== configprops block
+
+The `configprops` block is an enhanced source block that can be used to validate configuration property names, demonstrate how properties are used, and display properties in multiple formats.
+To the reader, the `configprops` block will appear as a source block, optionally in a tabbed interface.
+The block has the `indent=0` attribute implicitly set.
+
+The `configprops` block accepts input as either Java properties (`properties`) or YAML (`yaml`).
+The input language is specified using the second positional parameter, just like a source block.
+Currently, only the `yaml` input format allows the properties to be displayed in both formats (which is the preferred means of display).
+
+Here's an example of that shows how to use the `configprops` block with properties in the Java properties format.
+
+[source,asciidoc]
+....
+[configprops,properties]
+----
+spring.datasource.url=jdbc:mysql://localhost/test
+spring.datasource.username=dbuser
+spring.datasource.password=dbpass
+----
+....
+
+If a property in the block is not valid or is deprecated, the extension will log a warning.
+In the precending example, three property names will be validated:
+
+* `spring.datasource.url`
+* `spring.datasource.username`
+* `spring.datasource.password`
+
+While the Java properties format may suffice for simple use cases, the YAML format is preferred.
+Let's look at that same block again, this time using YAML as the source language.
+
+[source,asciidoc]
+....
+[configprops,yaml]
+----
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/test
+    username: dbuser
+    password: dbpass
+----
+....
+
+In addition to displaying the configuration properties in YAML format, this block will also display the properties in the Java properties format.
+The reader will be able to switch between the two formats using a tabbed interface.
+
+You can disable the tabbed interface, and the automatic conversion to the Java properties format, by setting the `noblocks` option:
+
+[source,asciidoc]
+....
+[configprops%noblocks,yaml]
+----
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/test
+    username: dbuser
+    password: dbpass
+----
+....
+
+When the configuration properties are specified in the YAML format, the validator will not validate keys of a java.util.Map property or indices of an java.util.List property, but will still convert the data to the Java properties format.
+Here's an example that contains these scenarios:
+
+[source,asciidoc]
+....
+[configprops,yaml]
+----
+spring:
+  mail:
+    properties:
+      "[mail.smtp.connectiontimeout]": 5000
+      "[mail.smtp.timeout]": 3000
+      "[mail.smtp.writetimeout]": 5000
+  ldap:
+    embedded:
+      base-dn:
+      - dc=spring,dc=io
+      - dc=pivotal,dc=io
+  mvc:
+    contentnegotiation:
+      media-types:
+        markdown: text/markdown
+----
+....
+
+In the preceding example, three property names will be validated:
+
+* `spring.mail.properties`
+* `spring.ldap.embedded.base-dn`
+* `spring.mvc.contentnegotiation.media-type`
+
+The other keys are user-defined and thus cannot be validated.
+
+Here's how this configuration will be displayed in the Java properties format:
+
+[,properties]
+----
+spring.mail.properties[mail.smtp.connectiontimeout]=5000
+spring.mail.properties[mail.smtp.timeout]=3000
+spring.mail.properties[mail.smtp.writetimeout]=5000
+spring.ldap.embedded.base-dn[0]=dc=spring,dc=io
+spring.ldap.embedded.base-dn[1]=dc=pivotal,dc=io
+spring.mvc.contentnegotiation.media-types.markdown=text/markdown
+----
+
+If you want to forgo validation of property names, such as for hypothetical examples, set the `novalidate` option.
+
+[source,asciidoc]
+....
+[configprops%novalidate,yaml]
+----
+hypothetical:
+  property:
+    name: value
+----
+....
+
 ifndef::env-npm[]
 == Development Quickstart
 
