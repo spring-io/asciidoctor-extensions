@@ -405,6 +405,31 @@ describe('include-code-extension', () => {
       expect(actual.getBlocks()[0].getAttributes().language).to.equal('kotlin')
     })
 
+    it('should not include code for Kotlin file with .kotlin extension', () => {
+      addExample(
+        'java/hello.java',
+        heredoc`
+        public class Hello {
+          public static void main (String[] args) {
+            System.out.println("Hello, World!");
+          }
+        }
+        `
+      )
+      addExample(
+        'kotlin/hello.kotlin',
+        heredoc`
+        fun main(args : Array<String>) {
+         println("Hello, World!")
+        }
+        `
+      )
+      const input = 'include-code::hello[]'
+      const actual = run(input)
+      expect(actual.getBlocks()).to.have.lengthOf(1)
+      expect(actual.getBlocks()[0].getAttributes().language).to.equal('java')
+    })
+
     it('should not include code for unsupported language, even if include-<lang> is defined', () => {
       addExample('ruby/hello.rb', 'puts "Hello, World!"')
       addExample(
