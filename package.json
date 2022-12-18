@@ -19,6 +19,7 @@
   },
   "scripts": {
     "coverage": "nyc _mocha",
+    "coverage-strict": "nyc --branches=100 --lines=100 _mocha",
     "build": "npm test && npm run lint",
     "format": "node npm/format.js lib,test,npm",
     "lint": "eslint \"{lib,test,npm}/**/*.js\"",
@@ -72,8 +73,9 @@
     "prettier-eslint": "~15.0"
   },
   "nyc": {
-    "cache": true,
+    "all": true,
     "cacheDir": "node_modules/.cache/nyc",
+    "checkCoverage": true,
     "include": [
       "lib/*.js"
     ],
