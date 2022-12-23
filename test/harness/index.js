@@ -41,4 +41,14 @@ const heredoc = (literals, ...vals) => {
   return (indentSize ? lines.map((l) => (l.charAt() === ' ' ? l.slice(indentSize) : l)) : lines).join('')
 }
 
-module.exports = { expect: chai.expect, filterLines, heredoc, spy: chai.spy }
+function withMemoryLogger (cb) {
+  const Asciidoctor = global.Opal.Asciidoctor
+  const oldLogger = Asciidoctor.LoggerManager.logger
+  try {
+    cb((Asciidoctor.LoggerManager.logger = Asciidoctor.MemoryLogger.create()))
+  } finally {
+    Asciidoctor.LoggerManager.logger = oldLogger
+  }
+}
+
+module.exports = { expect: chai.expect, filterLines, heredoc, spy: chai.spy, withMemoryLogger }

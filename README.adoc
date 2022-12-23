@@ -494,6 +494,29 @@ hypothetical:
 ----
 ....
 
+=== Section IDs
+
+*require name:* @springio/asciidoctor-extensions/section-ids-extension
+
+This section validates the document ID and the IDs of its sections.
+It ensures that each ID uses valid characters (kebab-case by default).
+It also checks that the IDs of sections extend the ID of their parent section.
+
+The following IDs are valid (using the default configuration):
+
+* top-level
+** top-level.nested-child
+*** top-level.nested-child.grandchild
+
+A warning is logged for each invalid ID.
+
+The word and level separators separators can be controlled using the following two AsciiDoc attributes:
+
+sectid-word-separator (default: -):: The character that must be used to separate words in a local ID (the final segment).
+sectid-level-separator (default: .):: The character that must be used to separate levels in a section ID.
+
+All IDs must be lowercase, must start with an alphabetic character, and may only contain alphanumeric characters aside from the aforementioned separators.
+
 ifndef::env-npm[]
 == Development Quickstart
 

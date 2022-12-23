@@ -41,7 +41,8 @@
     "./code-chomping-extension": "./lib/code-chomping-extension.js",
     "./code-folding-extension": "./lib/code-folding-extension.js",
     "./configuration-properties-extension": "./lib/configuration-properties-extension.js",
-    "./include-code-extension": "./lib/include-code-extension.js"
+    "./include-code-extension": "./lib/include-code-extension.js",
+    "./section-ids-extension": "./lib/section-ids-extension.js"
   },
   "imports": {
     "#package": "./package.json"
