@@ -29,6 +29,8 @@ In order to use this extension, you must have Node.js 16 or higher installed on 
 These extensions are intended to be used with Asciidoctor.js.
 Since this project does not declare Asciidoctor.js as a dependency to afford you flexibility, you must have Asciidoctor.js 2.2 or higher installed in your project.
 
+== Installation
+
 Use the following command to install the @springio/asciidoctor-extensions package into your project:
 
 [,console]
@@ -40,13 +42,36 @@ ifndef::env-npm[]
 To use the development version instead, refer to the <<Development Quickstart>>.
 
 endif::[]
+You also need to register the extension in the Antora playbook.
+The require name(s) for each extension is listed in the documentation for that extension.
+Here's an example of how to register the common extensions in the `asciidoc.extensions` key in the Antora playbook:
+
+[,yaml]
+----
+asciidoc:
+  extensions:
+  - '@springio/asciidoctor-extensions'
+----
+
+Several extensions will log a warning if a scenario is invalid.
+In order to see the line number of the correct file where the problem occurs in the message, you must enable Asciidoctor's sourcemap.
+To do so, set the `asciidoc.sourcemap` key in the Antora playbook as follows:
+
+[,yaml]
+----
+asciidoc:
+  sourcemap: true
+  extensions:
+  # ...
+----
+
 == Extensions
 
 This section documents the Asciidoctor extensions that are provided by this library.
 
 === Code Chomping
 
-*require name:* @springio/asciidoctor-extensions/code-chomping-extension
+*require name:* @springio/asciidoctor-extensions or @springio/asciidoctor-extensions/code-chomping-extension
 
 The code chomping extension allows specific parts of a Java, Kotlin, or Groovy source block to be removed.
 The extension will not run on any other source, listing, or literal blocks.
@@ -160,7 +185,7 @@ If this attribute is set and its value is empty, the original package declaratio
 
 === Code Folding
 
-*require name:* @springio/asciidoctor-extensions/code-folding-extension
+*require name:* @springio/asciidoctor-extensions or @springio/asciidoctor-extensions/code-folding-extension
 
 The code folding extension allows non-pertinent code in a source block to be hidden on initial view.
 The user can click the "`unfold`" button to reveal the hidden code.
@@ -252,7 +277,7 @@ The attribute value may be one of the following keywords:
 
 === Include Code
 
-*require name:* @springio/asciidoctor-extensions/include-code-extension
+*require name:* @springio/asciidoctor-extensions or @springio/asciidoctor-extensions/include-code-extension
 
 The include code extension provides the `include-code` block macro.
 This macro generates code (i.e., source) blocks by importing auto-discovered code files in one or more languages (currently only Java, Kotlin, or Groovy) from preconfigured locations.
@@ -399,6 +424,7 @@ spring.datasource.password=dbpass
 ....
 
 If a property in the block is not valid or is deprecated, the extension will log a warning.
+
 In the precending example, three property names will be validated:
 
 * `spring.datasource.url`
