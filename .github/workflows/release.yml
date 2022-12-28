@@ -17,6 +17,7 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '16'
+        cache: 'npm'
     - name: Set up release environment
       run: |
         echo RELEASE_VERSION=${{ github.event.inputs.release-version }} >> $GITHUB_ENV
