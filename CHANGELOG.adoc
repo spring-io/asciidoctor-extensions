@@ -6,15 +6,43 @@ For a detailed view of what's changed, refer to the {url-repo}/commits[commit hi
 
 == 1.0.0-alpha.8 (2022-12-23)
 
-_No changes since previous release._
+=== Added
+
+* Add Asciidoctor extension to validate section IDs
+
+=== Changed
+
+* Use public API methods to access context and parent of section
+* Rename `IMPORT_FAMILIES` constant to `INCLUDE_FAMILIES` to align with extension name
+
+=== Fixed
+
+* Access extension groups using `$groups` method to ensure groups are initialized
 
 == 1.0.0-alpha.7 (2022-12-17)
 
-_No changes since previous release._
+=== Added
+
+* Add configuration properties extension
+
+=== Changed
+
+* Read contents of include eagerly in include code extension
 
 == 1.0.0-alpha.6 (2022-12-14)
 
-_No changes since previous release._
+=== Added
+
+* Add support for title attribute on include-code block macro
+
+=== Changed
+
+* Rename import block to include-code
+* Rename the code-import-extension to include-code-extension
+
+=== Fixed
+
+* Rework include code extension to add resource using include directive (supports tags and lines attributes)
 
 == 1.0.0-alpha.5 (2022-12-11)
 
