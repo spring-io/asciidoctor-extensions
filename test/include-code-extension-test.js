@@ -10,7 +10,7 @@ const { name: packageName } = require('#package')
 describe('include-code-extension', () => {
   const ext = require(packageName + '/include-code-extension')
 
-  const file = {
+  const defaultFile = {
     src: {
       component: 'spring-security',
       version: '6.0.0',
@@ -27,7 +27,7 @@ describe('include-code-extension', () => {
 
   const addExample = (relative, contents) => {
     contents = Buffer.from(contents)
-    const example = { contents, src: { ...file.src, family: 'example', relative, path: relative } }
+    const example = { contents, src: { ...defaultFile.src, family: 'example', relative, path: relative } }
     contentCatalog.files.push(example)
     return example
   }
@@ -52,7 +52,7 @@ describe('include-code-extension', () => {
     },
   })
 
-  const run = (input = [], opts = {}) => {
+  const run = (input = [], opts = {}, file = defaultFile) => {
     opts.attributes ??= {
       'include-java@': 'example$java',
       'include-kotlin@': 'example$kotlin',
@@ -65,6 +65,16 @@ describe('include-code-extension', () => {
     }
     const inputFile = { ...file, contents: Buffer.from(input) }
     return loadAsciiDoc(inputFile, contentCatalog, opts)
+  }
+
+  const relativeFile = (relative) => {
+    return {
+      ...defaultFile,
+      src: {
+        ...defaultFile.src,
+        relative,
+      },
+    }
   }
 
   beforeEach(() => {
@@ -509,6 +519,99 @@ describe('include-code-extension', () => {
       include-code::hello[]
       `
       const actual = run(input)
+      expect(actual.findBy({ context: 'listing' })).to.have.lengthOf(1)
+      expect(actual.findBy({ context: 'listing' })[0].getSource()).to.equal(expectedSource)
+    })
+
+    it('should use ID of document as intermediary path for resource outside of section and path when enabled', () => {
+      const expectedSource = heredoc`
+      fun main(args : Array<String>) {
+        println("Hello, World!")
+      }
+      `
+      addExample('kotlin/org/spring/sampleproject/hello.kt', expectedSource)
+      const input = heredoc`
+      [[sample-project]]
+      = Page Title
+
+      include-code::hello[]
+      `
+      const actual = run(
+        input,
+        {
+          attributes: { 'include-kotlin': 'example$kotlin', 'include-code-relative-option': '' },
+        },
+        relativeFile('org/spring/index.adoc')
+      )
+      expect(actual.findBy({ context: 'listing' })).to.have.lengthOf(1)
+      expect(actual.findBy({ context: 'listing' })[0].getSource()).to.equal(expectedSource)
+    })
+
+    it('should use ID of document as intermediary path and escaped file path when enabled for resource outside of section', () => {
+      const expectedSource = heredoc`
+      fun main(args : Array<String>) {
+        println("Hello, World!")
+      }
+      `
+      addExample('kotlin/org/springmvc/sampleproject/hello.kt', expectedSource)
+      const input = heredoc`
+      [[sample-project]]
+      = Page Title
+
+      include-code::hello[]
+      `
+      const actual = run(
+        input,
+        {
+          attributes: { 'include-kotlin': 'example$kotlin', 'include-code-relative-option': '' },
+        },
+        relativeFile('org/spring-mvc/index.adoc')
+      )
+      expect(actual.findBy({ context: 'listing' })).to.have.lengthOf(1)
+      expect(actual.findBy({ context: 'listing' })[0].getSource()).to.equal(expectedSource)
+    })
+
+    it('should handle relative path with no directory', () => {
+      const expectedSource = heredoc`
+      fun main(args : Array<String>) {
+        println("Hello, World!")
+      }
+      `
+      addExample('kotlin/sampleproject/hello.kt', expectedSource)
+      const input = heredoc`
+      [[sample-project]]
+      = Page Title
+
+      include-code::hello[]
+      `
+      // default relative is index.adoc (no path) so no need to override
+      const actual = run(input, {
+        attributes: { 'include-kotlin': 'example$kotlin', 'include-code-relative-option': '' },
+      })
+      expect(actual.findBy({ context: 'listing' })).to.have.lengthOf(1)
+      expect(actual.findBy({ context: 'listing' })[0].getSource()).to.equal(expectedSource)
+    })
+
+    it('should use ID of document as intermediary path for resource outside of section and not path when not enabled', () => {
+      const expectedSource = heredoc`
+      fun main(args : Array<String>) {
+        println("Hello, World!")
+      }
+      `
+      addExample('kotlin/org/spring/sampleproject/hello.kt', expectedSource)
+      const input = heredoc`
+      [[org.spring.sample-project]]
+      = Page Title
+
+      include-code::hello[]
+      `
+      const actual = run(
+        input,
+        {
+          attributes: { 'include-kotlin': 'example$kotlin' },
+        },
+        relativeFile('org/spring/index.adoc')
+      )
       expect(actual.findBy({ context: 'listing' })).to.have.lengthOf(1)
       expect(actual.findBy({ context: 'listing' })[0].getSource()).to.equal(expectedSource)
     })
