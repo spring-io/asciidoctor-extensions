@@ -534,12 +534,12 @@ describe('include-code-extension', () => {
       [[sample-project]]
       = Page Title
 
-      include-code::hello[]
+      include-code::./hello[]
       `
       const actual = run(
         input,
         {
-          attributes: { 'include-kotlin': 'example$kotlin', 'include-code-relative-option': '' },
+          attributes: { 'include-kotlin': 'example$kotlin' },
         },
         relativeFile('org/spring/index.adoc')
       )
@@ -558,12 +558,12 @@ describe('include-code-extension', () => {
       [[sample-project]]
       = Page Title
 
-      include-code::hello[]
+      include-code::./hello[]
       `
       const actual = run(
         input,
         {
-          attributes: { 'include-kotlin': 'example$kotlin', 'include-code-relative-option': '' },
+          attributes: { 'include-kotlin': 'example$kotlin' },
         },
         relativeFile('org/spring-mvc/index.adoc')
       )
@@ -582,11 +582,11 @@ describe('include-code-extension', () => {
       [[sample-project]]
       = Page Title
 
-      include-code::hello[]
+      include-code::./hello[]
       `
       // default relative is index.adoc (no path) so no need to override
       const actual = run(input, {
-        attributes: { 'include-kotlin': 'example$kotlin', 'include-code-relative-option': '' },
+        attributes: { 'include-kotlin': 'example$kotlin' },
       })
       expect(actual.findBy({ context: 'listing' })).to.have.lengthOf(1)
       expect(actual.findBy({ context: 'listing' })[0].getSource()).to.equal(expectedSource)

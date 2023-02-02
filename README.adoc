@@ -323,7 +323,7 @@ If Asciidoctor Tabs is not registered in this case, the source blocks will be cr
 
 If none of the supported `include-*` attributes are defined, or if no code files are found for a target at the locations defined by these attributes, the extension will log a warning.
 
-If the attribute `include-code-relative-option` is set, then the path of the source file with be used to compute the location of the import.
+If the target path starts with `./`, then the path (with `-` removed) of the source file with be used to compute the location of the import.
 The location is defined first by an AsciiDoc attribute, next by the path of the source file, and then by the ID of the nearest ancestor section or document.
 
 Consider the following AsciiDoc source:
