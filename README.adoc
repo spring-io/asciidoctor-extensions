@@ -323,6 +323,23 @@ If Asciidoctor Tabs is not registered in this case, the source blocks will be cr
 
 If none of the supported `include-*` attributes are defined, or if no code files are found for a target at the locations defined by these attributes, the extension will log a warning.
 
+If the target path starts with `./`, then the path (with `-` removed) of the source file with be used to compute the location of the import.
+The location is defined first by an AsciiDoc attribute, next by the path of the source file, and then by the ID of the nearest ancestor section or document.
+
+Consider the following AsciiDoc source:
+
+.org/spring/index.adoc
+[,asciidoc]
+----
+[[my.example-project]]
+== My Example Project
+
+include-code::./SomeCode[]
+----
+
+If the `include-java` attribute is defined, the `include-code` block macro will look for the Java file at the location `\{include-java}/org/spring/my/exampleproject/SomeCode.java`.
+It will then create a source block with the language `java` that contains the contents of this file.
+
 === Configuration Properties
 
 *require name:* @springio/asciidoctor-extensions/configuration-properties-extension
