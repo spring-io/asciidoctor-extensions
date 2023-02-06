@@ -334,7 +334,7 @@ Consider the following AsciiDoc source:
 [[my.example-project]]
 == My Example Project
 
-include-code::SomeCode[]
+include-code::./SomeCode[]
 ----
 
 If the `include-java` attribute is defined, the `include-code` block macro will look for the Java file at the location `\{include-java}/org/spring/my/exampleproject/SomeCode.java`.
