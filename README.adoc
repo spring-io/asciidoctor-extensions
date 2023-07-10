@@ -168,6 +168,7 @@ The attribute value may be one of the following keywords:
 |Chomp the package declaration, or replace the name if the `chomp-package-replacement` attribute is set
 |===
 
+Package names should follow Java naming conventions (all lowercase characters).
 Instead of dropping the package declaration, you can replace the name.
 To do so, ensure the `packages` operation is enabled.
 Then, set the `chomp-package-replacement` to the replacement name, such as `org.example`.
