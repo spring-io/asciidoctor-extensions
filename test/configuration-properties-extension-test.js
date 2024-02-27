@@ -233,6 +233,18 @@ describe('configuration-properties-extension', () => {
       expect(messages).to.be.empty()
     })
 
+    it('should convert valid property to monospaced phrase without warning when has map ancestor', () => {
+      addConfigurationMetadataFixture({ name: 'management.observations.enable', type: 'java.util.Map<String, String>' })
+      const input = heredoc`
+      = Page Title
+
+      configprop:management.observations.enable.my.key[]
+      `
+      const actual = run(input, { convert: true })
+      expect(actual).to.include('<code>management.observations.enable.my.key</code>')
+      expect(messages).to.be.empty()
+    })
+
     it('should convert valid property as env var to monospaced phrase if format=envvar is set', () => {
       addConfigurationMetadataFixture({ name: 'foo.bar.baz-name' })
       const input = heredoc`
