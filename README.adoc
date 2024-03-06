@@ -324,7 +324,7 @@ The following languages are supported by convention based imports:
 
 A code block will be created for a matching file in each configured language.
 If more than one file is found, and the Asciidoctor Tabs extension is registered, the code blocks will automatically be enclosed in a tabs block.
-If Asciidoctor Tabs is not registered in this case, the source blocks will be creates as siblings.
+If Asciidoctor Tabs is not registered in this case, the source blocks will be created as siblings.
 
 If none of the supported `include-*` attributes are defined, or if no code files are found for a target at the locations defined by these attributes, the extension will log a warning.
 
