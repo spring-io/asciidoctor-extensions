@@ -57,6 +57,7 @@ describe('include-code-extension', () => {
       'include-java@': 'example$java',
       'include-kotlin@': 'example$kotlin',
       'include-groovy@': 'example$groovy',
+      'include-xml@': 'example$xml',
     }
     opts.extensions = [ext]
     if (opts.registerAsciidoctorTabs) {
@@ -163,6 +164,7 @@ describe('include-code-extension', () => {
         { style: 'source', language: 'java', title: 'Java' },
         { style: 'source', language: 'kotlin', title: 'Kotlin' },
         { style: 'source', language: 'groovy', title: 'Groovy' },
+        { style: 'source', language: 'xml', title: 'Xml' },
       ]
       addExample(
         'kotlin/hello.kt',
@@ -183,9 +185,10 @@ describe('include-code-extension', () => {
         `
       )
       addExample('groovy/hello.groovy', 'println "Hello, World!"')
+      addExample('xml/hello.xml', 'println "<hello />"')
       const input = 'include-code::hello[]'
       const actual = run(input).findBy({ context: 'listing' })
-      expect(actual).to.have.lengthOf(3)
+      expect(actual).to.have.lengthOf(4)
       const actualProperties = actual.map((block) => {
         return { style: block.getStyle(), language: block.getAttributes().language, title: block.getTitle() }
       })
@@ -315,6 +318,7 @@ describe('include-code-extension', () => {
         { style: 'source', language: 'java', title: undefined },
         { style: 'source', language: 'kotlin', title: undefined },
         { style: 'source', language: 'groovy', title: undefined },
+        { style: 'source', language: 'xml', title: undefined },
       ]
       addExample(
         'kotlin/hello.kt',
@@ -335,6 +339,7 @@ describe('include-code-extension', () => {
         `
       )
       addExample('groovy/hello.groovy', 'println "Hello, World!"')
+      addExample('xml/hello.xml', 'println "<hello />"')
       const input = 'include-code::hello[]'
       const doc = run(input, { registerAsciidoctorTabs: true })
       const tabs = doc.getBlocks()[0]
@@ -343,9 +348,9 @@ describe('include-code-extension', () => {
       expect(tabs.getTitle()).to.be.undefined()
       const tablist = tabs.findBy({ context: 'ulist' })[0]
       expect(tablist).to.exist()
-      expect(tablist.getItems()).to.have.lengthOf(3)
+      expect(tablist.getItems()).to.have.lengthOf(4)
       const codeBlocks = tabs.findBy({ context: 'listing' })
-      expect(codeBlocks).to.have.lengthOf(3)
+      expect(codeBlocks).to.have.lengthOf(4)
       const actualProperties = codeBlocks.map((block) => {
         return { style: block.getStyle(), language: block.getAttributes().language, title: block.getTitle() }
       })
