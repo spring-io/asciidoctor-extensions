@@ -10,13 +10,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  activate:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Proceed
-      run: echo ok go
   build:
-    needs: activate
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
