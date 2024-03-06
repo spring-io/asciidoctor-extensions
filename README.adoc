@@ -281,7 +281,7 @@ The attribute value may be one of the following keywords:
 *require name:* @springio/asciidoctor-extensions or @springio/asciidoctor-extensions/include-code-extension
 
 The include code extension provides the `include-code` block macro.
-This macro generates code (i.e., source) blocks by importing auto-discovered code files in one or more languages (currently only Java, Kotlin, or Groovy) from preconfigured locations.
+This macro generates code (i.e., source) blocks by importing auto-discovered code files in one or more languages (currently only XML, Java, Kotlin, or Groovy) from preconfigured locations.
 The location is defined first by an AsciiDoc attribute, then by the ID of the nearest ancestor section or document.
 The ID is converted to a path by removing all `-` characters and replacing all `.` characters with `/`.
 When searching, the extension appends the appropriate file extension for each configured language.
@@ -304,6 +304,10 @@ The following languages are supported by convention based imports:
 [%autowidth,cols=~;~;~]
 |===
 |Language |Root Directory Attribute| File Extension
+
+|XML
+|include-xml
+|.xml
 
 |Java
 |include-java
