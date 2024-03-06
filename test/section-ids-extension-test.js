@@ -102,6 +102,26 @@ describe('section-ids-extension', () => {
       })
     })
 
+    it('should warn if document ID with level separator does not match expected syntax', () => {
+      const input = heredoc`
+      [[foo.id_of_document]]
+      = Document Title
+
+      content
+      `
+      withMemoryLogger((logger) => {
+        run(input)
+        const messages = logger.getMessages()
+        expect(messages).to.have.lengthOf(1)
+        const message = messages[0]
+        expect(message.severity).to.equal('WARN')
+        console.log(message.message.text)
+        expect(message.message.text).to.match(
+          /^local section ID does not match .+: foo.id_of_document \(id_of_document\)$/
+        )
+      })
+    })
+
     it('should include file and line information in log message if sourcemap is enabled', () => {
       const input = heredoc`
       [#not_valid]
@@ -127,7 +147,7 @@ describe('section-ids-extension', () => {
       })
     })
 
-    it('should warn if document ID contains level separator', () => {
+    it('should validate if document ID contains level separator', () => {
       const input = heredoc`
       [[document.title]]
       = Document Title
@@ -136,11 +156,7 @@ describe('section-ids-extension', () => {
       `
       withMemoryLogger((logger) => {
         run(input)
-        const messages = logger.getMessages()
-        expect(messages).to.have.lengthOf(1)
-        const message = messages[0]
-        expect(message.severity).to.equal('WARN')
-        expect(message.message.text).to.match(/^local section ID does not match .+: document\.title$/)
+        expect(logger.getMessages()).to.be.empty()
       })
     })
 
