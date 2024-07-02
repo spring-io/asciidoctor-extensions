@@ -565,6 +565,101 @@ sectid-level-separator (default: .):: The character that must be used to separat
 
 All IDs must be lowercase, must start with an alphabetic character, and may only contain alphanumeric characters aside from the aforementioned separators.
 
+=== Javadoc
+
+*require name:* @springio/asciidoctor-extensions/javadoc-extension
+
+The javadoc extension allows you to quickly create links to javadoc sites.
+For example, `javadoc:com.example.MyClass[]` will create a link to `xref:attachment$api/java/com/example/MyClass.html` with the text `MyClass`.
+
+==== Syntax
+
+The following format can be used when declaring a javadoc link:
+
+----
+[<location>]<class-reference>[#<anchor>]
+----
+
+Only `<class-reference>` is mandatory, and it must be the fully qualified name of the class to link to.
+For example, `com.example.MyClass`.
+References to inner-classes should use `$` notation instead of `.`.
+For example, `com.example.MyClass$Builder`.
+
+If a `<location>` is specified, it must end with `/`.
+
+Any `<anchor>` must exactly match the anchor in the corresponding javadoc page.
+
+==== Locations
+
+Unless otherwise overridden, the default javadoc location will be `xref:attachment$api/java`.
+If you want a different default, you can set the `javadoc-location` document attribute.
+For example, you can set `javadoc-location` to `xref:api:java` if you publish javadoc under a `api` Antora module.
+
+NOTE: document attributes can be set in your Antora playback under the https://docs.antora.org/antora/latest/playbook/asciidoc-attributes/#attributes-key[attributes key].
+
+You can also override locations on a per-link basis.
+For example:
+
+[,asciidoc]
+----
+= Example
+:url-jdk-javadoc: https://docs.oracle.com/en/java/javase/17/docs/api
+
+Please read javadoc:{url-jdk-javadoc}/java.base/java.io.InputStream[]
+----
+
+==== Formats and Link Text
+
+By default, a short form of the class name is used as the link text.
+For example, if you link to `com.example.MyClass`, only `MyClass` is used for the link text.
+
+If you want to change the format of the link text, you can use the `format` attribute.
+For example, `javadoc:com.example.MyClass[format=full]` will use `com.example.MyClass` as the link text.
+
+The following formats are supported:
+
+[cols="1,1,3"]
+|===
+| Name | Description | Example
+
+| `short` (default)
+| The short class name
+| `com.example.MyClass$Builder` -> `MyClass.Builder`
+
+| `full`
+| The fully-qualified class name
+| `com.example.MyClass$Builder` -> `com.example.MyClass.Builder`
+
+| `annotation`
+| The short class name prefixed with `@`
+| `com.example.MyAnnotation` -> `@MyAnnotation`
+|===
+
+TIP: You can change the default format by setting a `javadoc-format` document attribute.
+This can be done site-wide, or on a page-by-page basis.
+
+You can also specify directly specify link text if the existing formats are not suitable:
+
+[,asciidoc]
+----
+See javadoc:com.example.MyClass$Builder[Builder] for details.
+----
+
+NOTE: The link text is _always_ wrapped in a `<code>` block so you should not use backticks.
+
+==== Anchors
+
+Anchors may be used to link to a specific part of a javadoc page.
+The anchor link must exactly match the link in the target page.
+For example, `javadoc:com.example.MyClass#myMethod(java.lang.String)`
+
+When an anchor is specified, the link text will include a readable version.
+The example above would render the link text `MyClass.myMethod(String)`.
+
+==== UI Support
+
+All anchors created using the `javadoc` macro will have a role of `apiref` to allow the UI to style them appropriately.
+
 ifndef::env-npm[]
 == Development Quickstart
 
