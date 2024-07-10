@@ -101,7 +101,7 @@ describe('javadoc-extension', () => {
         `
       const actual = run(input)
       expect(actual).to.include(
-        '<code><a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.html" class="xref page apiref">MyClass</a></code>'
+        '<a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.html" class="xref page apiref"><code>MyClass</code></a>'
       )
     })
 
@@ -114,7 +114,7 @@ describe('javadoc-extension', () => {
         `
       const actual = run(input)
       expect(actual).to.include(
-        '<code><a href="https://docs.example.com/api/java/com/example/MyClass.html" class="xref page apiref">MyClass</a></code>'
+        '<a href="https://docs.example.com/api/java/com/example/MyClass.html" class="xref page apiref"><code>MyClass</code></a>'
       )
     })
 
@@ -127,7 +127,7 @@ describe('javadoc-extension', () => {
         `
       const actual = run(input)
       expect(actual).to.include(
-        '<code><a href="https://docs.example.com/api/java/com/example/MyClass.html" class="xref page apiref">MyClass</a></code>'
+        '<a href="https://docs.example.com/api/java/com/example/MyClass.html" class="xref page apiref"><code>MyClass</code></a>'
       )
     })
 
@@ -139,7 +139,7 @@ describe('javadoc-extension', () => {
         `
       const actual = run(input)
       expect(actual).to.include(
-        '<code><a href="https://docs.example.com/api/java/com/example/MyClass.html" class="xref page apiref">MyClass</a></code>'
+        '<a href="https://docs.example.com/api/java/com/example/MyClass.html" class="xref page apiref"><code>MyClass</code></a>'
       )
     })
 
@@ -151,7 +151,7 @@ describe('javadoc-extension', () => {
         `
       const actual = run(input)
       expect(actual).to.include(
-        '<code><a href="https://javadoc.example.com/latest/com/example/MyClass.html" class="apiref">MyClass</a></code>'
+        '<a href="https://javadoc.example.com/latest/com/example/MyClass.html" class="apiref"><code>MyClass</code></a>'
       )
     })
 
@@ -163,7 +163,7 @@ describe('javadoc-extension', () => {
         `
       const actual = run(input)
       expect(actual).to.include(
-        '<code><a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.html" class="xref page apiref">com.example.MyClass</a></code>'
+        '<a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.html" class="xref page apiref"><code>com.example.MyClass</code></a>'
       )
     })
 
@@ -175,7 +175,7 @@ describe('javadoc-extension', () => {
         `
       const actual = run(input)
       expect(actual).to.include(
-        '<code><a href="https://docs.example.com/_attachments/api/java/com/example/MyAnnotation.html" class="xref page apiref">@MyAnnotation</a></code>'
+        '<a href="https://docs.example.com/_attachments/api/java/com/example/MyAnnotation.html" class="xref page apiref"><code>@MyAnnotation</code></a>'
       )
     })
 
@@ -187,7 +187,7 @@ describe('javadoc-extension', () => {
         `
       const actual = run(input)
       expect(actual).to.include(
-        '<code><a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.html" class="xref page apiref">MyClass</a></code>'
+        '<a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.html" class="xref page apiref"><code>MyClass</code></a>'
       )
     })
 
@@ -200,7 +200,7 @@ describe('javadoc-extension', () => {
         `
       const actual = run(input)
       expect(actual).to.include(
-        '<code><a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.html" class="xref page apiref">com.example.MyClass</a></code>'
+        '<a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.html" class="xref page apiref"><code>com.example.MyClass</code></a>'
       )
     })
 
@@ -208,11 +208,11 @@ describe('javadoc-extension', () => {
       const input = heredoc`
       = Page Title
 
-      javadoc:com.example.MyClass$Builder[Builder]
+      javadoc:com.example.MyClass$Builder[\`Builder\`]
       `
       const actual = run(input)
       expect(actual).to.include(
-        '<code><a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.Builder.html" class="xref page apiref">Builder</a></code>'
+        '<a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.Builder.html" class="xref page apiref"><code>Builder</code></a>'
       )
     })
 
@@ -224,7 +224,7 @@ describe('javadoc-extension', () => {
       `
       const actual = run(input)
       expect(actual).to.include(
-        '<code><a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.Builder.html" class="xref page apiref">MyClass.Builder</a></code>'
+        '<a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.Builder.html" class="xref page apiref"><code>MyClass.Builder</code></a>'
       )
     })
 
@@ -236,7 +236,7 @@ describe('javadoc-extension', () => {
       `
       const actual = run(input)
       expect(actual).to.include(
-        '<code><a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.html#run(java.lang.Class,java.lang.String)" class="xref page apiref">MyClass.run(Class, String)</a></code>'
+        '<a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.html#run(java.lang.Class,java.lang.String)" class="xref page apiref"><code>MyClass.run(Class, String)</code></a>'
       )
     })
 
@@ -248,7 +248,7 @@ describe('javadoc-extension', () => {
       `
       const actual = run(input)
       expect(actual).to.include(
-        '<code><a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.html#run(java.lang.Class,java.lang.String...)" class="xref page apiref">MyClass.run(Class, String&#8230;&#8203;)</a></code>'
+        '<a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.html#run(java.lang.Class,java.lang.String&#8230;&#8203;)" class="xref page apiref"><code>MyClass.run(Class, String&#8230;&#8203;)</code></a>'
       )
     })
 
@@ -260,7 +260,7 @@ describe('javadoc-extension', () => {
       `
       const actual = run(input)
       expect(actual).to.include(
-        '<code><a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.html#MY_CONST" class="xref page apiref">MyClass.MY_CONST</a></code>'
+        '<a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.html#MY_CONST" class="xref page apiref"><code>MyClass.MY_CONST</code></a>'
       )
     })
 
@@ -272,7 +272,19 @@ describe('javadoc-extension', () => {
       `
       const actual = run(input)
       expect(actual).to.include(
-        '<code><a href="https://docs.example.com/_attachments/api/java/com/example/MyAnnotation.html#format()" class="xref page apiref">@MyAnnotation.format</a></code>'
+        '<a href="https://docs.example.com/_attachments/api/java/com/example/MyAnnotation.html#format()" class="xref page apiref"><code>@MyAnnotation.format</code></a>'
+      )
+    })
+
+    it('should convert with own formatted text', () => {
+      const input = heredoc`
+      = Page Title
+
+      javadoc:com.example.MyClass[Take a _look_ at \`MyClass\` for *details*]
+      `
+      const actual = run(input)
+      expect(actual).to.include(
+        '<a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.html" class="xref page apiref">Take a <em>look</em> at <code>MyClass</code> for <strong>details</strong></a>'
       )
     })
   })

@@ -642,10 +642,8 @@ You can also specify directly specify link text if the existing formats are not 
 
 [,asciidoc]
 ----
-See javadoc:com.example.MyClass$Builder[Builder] for details.
+javadoc:com.example.MyClass$Builder[See `Builder` for details].
 ----
-
-NOTE: The link text is _always_ wrapped in a `<code>` block so you should not use backticks.
 
 ==== Anchors
 
