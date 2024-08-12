@@ -131,6 +131,34 @@ describe('javadoc-extension', () => {
       )
     })
 
+    it('should convert with specified location when has package specific javadoc-location attributes', () => {
+      const input = heredoc`
+        = Page Title
+        :javadoc-location: xref:api:java
+        :javadoc-location-com-example: xref:api:e
+        :javadoc-location-com-example-one: xref:api:e1
+        :javadoc-location-com-example-one-two: xref:api:e12
+
+        javadoc:org.example.MyClass1[]
+        javadoc:com.example.one.two.three.MyClass2[]
+        javadoc:com.example.one.three.three.MyClass3[]
+        javadoc:com.example.test.MyClass4[]
+        `
+      const actual = run(input)
+      expect(actual).to.include(
+        '<a href="https://docs.example.com/api/java/org/example/MyClass1.html" class="xref page apiref"><code>MyClass1</code></a>'
+      )
+      expect(actual).to.include(
+        '<a href="https://docs.example.com/api/e12/com/example/one/two/three/MyClass2.html" class="xref page apiref"><code>MyClass2</code></a>'
+      )
+      expect(actual).to.include(
+        '<a href="https://docs.example.com/api/e1/com/example/one/three/three/MyClass3.html" class="xref page apiref"><code>MyClass3</code></a>'
+      )
+      expect(actual).to.include(
+        '<a href="https://docs.example.com/api/e/com/example/test/MyClass4.html" class="xref page apiref"><code>MyClass4</code></a>'
+      )
+    })
+
     it('should convert with specified location when has xref location in macro', () => {
       const input = heredoc`
         = Page Title

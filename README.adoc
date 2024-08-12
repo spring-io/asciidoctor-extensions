@@ -597,7 +597,27 @@ For example, you can set `javadoc-location` to `xref:api:java` if you publish ja
 
 NOTE: document attributes can be set in your Antora playback under the https://docs.antora.org/antora/latest/playbook/asciidoc-attributes/#attributes-key[attributes key].
 
-You can also override locations on a per-link basis.
+===== Package Specific Locations
+
+You can use package specific `javadoc-location` document attributes if you want to support multiple locations.
+To set a package specific location, add a `javadoc-location-<package>` document attribute.
+The `<package>` should be the java package name with all `.` characters replaced with `-`.
+
+For example, the following will use different locations for `com.example.core` links:
+
+[,asciidoc]
+----
+= Example
+:javadoc-location-com-example-core: {url-example-javadoc}
+
+Please see javadoc:com.example.core.util.MyUtils[]
+----
+
+===== Link Specific Locations
+
+You can override locations on a per-link basis by including the location directly in the link.
+The embedded link must end with a `/`.
+
 For example:
 
 [,asciidoc]
