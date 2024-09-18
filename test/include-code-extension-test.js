@@ -281,6 +281,66 @@ describe('include-code-extension', () => {
       expect(actual.getBlocks()[0].getAttributes()).to.include(expectedAttrs)
     })
 
+    it('should support sync-group-id', () => {
+      addExample(
+        'kotlin/hello.kt',
+        heredoc`
+        fun main(args : Array<String>) {
+          println("Hello, World!")
+        }
+        `
+      )
+      addExample(
+        'java/hello.java',
+        heredoc`
+        public class Hello {
+          public static void main (String[] args) {
+            System.out.println("Hello, World!");
+          }
+        }
+        `
+      )
+      const input = heredoc`
+      = Test
+      :tabs-sync-option:
+
+      include-code::hello[sync-group-id=thisisauniqueid]
+      `
+      const actual = run(input, { registerAsciidoctorTabs: true })
+      expect(actual.convert()).to.contain(
+        'class="openblock tabs is-sync data-sync-group-id=thisisauniqueid is-loading"'
+      )
+    })
+
+    it('should support sync-group-id not defined', () => {
+      addExample(
+        'kotlin/hello.kt',
+        heredoc`
+        fun main(args : Array<String>) {
+          println("Hello, World!")
+        }
+        `
+      )
+      addExample(
+        'java/hello.java',
+        heredoc`
+        public class Hello {
+          public static void main (String[] args) {
+            System.out.println("Hello, World!");
+          }
+        }
+        `
+      )
+      const input = heredoc`
+      = Test
+      :tabs-sync-option:
+
+      include-code::hello[]
+      `
+      const actual = run(input, { registerAsciidoctorTabs: true })
+      expect(actual.convert()).to.contain('class="openblock tabs is-sync is-loading"')
+    })
+
     it('should report line number of block macro when include tag not found', () => {
       const inputSource = heredoc`
       fun main(args : Array<String>) {
