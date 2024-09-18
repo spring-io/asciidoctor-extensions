@@ -63,7 +63,7 @@
   "devDependencies": {
     "@antora/asciidoc-loader": "latest",
     "@asciidoctor/core": "latest",
-    "@asciidoctor/tabs": "latest",
+    "@asciidoctor/tabs": "1.0.0-beta.6",
     "chai": "~4.3",
     "chai-fs": "~2.0",
     "chai-spies": "~1.0",
