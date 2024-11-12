@@ -159,6 +159,25 @@ describe('javadoc-extension', () => {
       )
     })
 
+    it('should convert with specified location when has single name package specific javadoc-location attributes', () => {
+      const input = heredoc`
+        = Page Title
+        :javadoc-location: xref:api:java
+        :javadoc-location-java: xref:api:e1
+        :javadoc-location-graphql: xref:api:e2
+
+        javadoc:java.util.ZipFile[]
+        javadoc:graphql.collect.ImmutableKit[]
+        `
+      const actual = run(input)
+      expect(actual).to.include(
+        '<a href="https://docs.example.com/api/e1/java/util/ZipFile.html" class="xref page apiref"><code>ZipFile</code></a>'
+      )
+      expect(actual).to.include(
+        '<a href="https://docs.example.com/api/e2/graphql/collect/ImmutableKit.html" class="xref page apiref"><code>ImmutableKit</code></a>'
+      )
+    })
+
     it('should convert with specified location when has xref location in macro', () => {
       const input = heredoc`
         = Page Title
