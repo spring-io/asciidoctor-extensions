@@ -261,6 +261,29 @@ describe('code-chomping-extension', () => {
       expect(actual).to.equal(expected)
     })
 
+    it('should replace package declaration when configured on the block', () => {
+      const code = heredoc`
+      package org.example;
+
+      public class Example {}
+      `
+
+      const input = heredoc`
+      :chomp: packages
+      :chomp_package_replacement: org.acme
+
+      [chomp_package_replacement=com.acme]
+      [,java]
+      ----
+      ${code}
+      ----
+      `
+
+      const expected = code.replace('package org.example', 'package com.acme')
+      const actual = run(input).getBlocks()[0].getSource()
+      expect(actual).to.equal(expected)
+    })
+
     it('should remove remaining lines after @chomp:file', () => {
       const input = heredoc`
       [,java]
