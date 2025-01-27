@@ -211,6 +211,24 @@ describe('include-code-extension', () => {
       expect(actual.getBlocks()[0].getTitle()).to.equal('Describe This')
     })
 
+    it('should pass attribute on block macro for single include through to resulting source block', () => {
+      const inputSource = heredoc`
+      package org.example
+
+      fun main(args : Array<String>) {
+        println("Hello, World!")
+      }
+      `
+      addExample('kotlin/hello.kt', inputSource)
+      const input = heredoc`
+      [some-attribute=alpha]
+      include-code::hello[]
+      `
+      const actual = run(input, { attributes: { 'include-kotlin': 'example$kotlin' } })
+      expect(actual.getBlocks()).to.have.lengthOf(1)
+      expect(actual.getBlocks()[0].getAttribute('some-attribute')).to.equal('alpha')
+    })
+
     it('should report correct line number in warning for block title', () => {
       const inputSource = heredoc`
       fun main(args : Array<String>) {
@@ -261,6 +279,35 @@ describe('include-code-extension', () => {
       expect(actual.getBlocks()).to.have.lengthOf(2)
       expect(actual.getBlocks()[0].getTitle()).to.equal('Describe This - Java')
       expect(actual.getBlocks()[1].getTitle()).to.equal('Describe This - Kotlin')
+    })
+
+    it('should pass attribute on block macro for multiple includes through to resulting source block', () => {
+      addExample(
+        'kotlin/hello.kt',
+        heredoc`
+        fun main(args : Array<String>) {
+          println("Hello, World!")
+        }
+        `
+      )
+      addExample(
+        'java/hello.java',
+        heredoc`
+        public class Hello {
+          public static void main (String[] args) {
+            System.out.println("Hello, World!");
+          }
+        }
+        `
+      )
+      const input = heredoc`
+      [some-attribute=alpha]
+      include-code::hello[]
+      `
+      const actual = run(input)
+      expect(actual.getBlocks()).to.have.lengthOf(2)
+      expect(actual.getBlocks()[0].getAttribute('some-attribute')).to.equal('alpha')
+      expect(actual.getBlocks()[1].getAttribute('some-attribute')).to.equal('alpha')
     })
 
     it('should support attributes on include directive of included file', () => {
@@ -415,6 +462,54 @@ describe('include-code-extension', () => {
       const actualProperties = codeBlocks.map((block) => {
         return { style: block.getStyle(), language: block.getAttributes().language, title: block.getTitle() }
       })
+      expect(actualProperties).to.eql(expected)
+    })
+
+    it('should pass attribute on block macro to each tabbed block if @asciidoctor/tabs extension is registered', () => {
+      const expected = [
+        { style: 'source', language: 'java', title: undefined, someAttribute: 'alpha' },
+        { style: 'source', language: 'kotlin', title: undefined, someAttribute: 'alpha' },
+        { style: 'source', language: 'groovy', title: undefined, someAttribute: 'alpha' },
+        { style: 'source', language: 'xml', title: undefined, someAttribute: 'alpha' },
+      ]
+      addExample(
+        'kotlin/hello.kt',
+        heredoc`
+        fun main(args : Array<String>) {
+          println("Hello, World!")
+        }
+        `
+      )
+      addExample(
+        'java/hello.java',
+        heredoc`
+        public class Hello {
+          public static void main (String[] args) {
+            System.out.println("Hello, World!");
+          }
+        }
+        `
+      )
+      addExample('groovy/hello.groovy', 'println "Hello, World!"')
+      addExample('xml/hello.xml', 'println "<hello />"')
+      const input = heredoc`
+      [some-attribute=alpha]
+      include-code::hello[]`
+      const doc = run(input, { registerAsciidoctorTabs: true })
+      const tabs = doc.getBlocks()[0]
+      console.log(tabs)
+      expect(tabs).to.exist()
+      expect(tabs.hasRole('tabs')).to.be.true()
+      expect(tabs.getTitle()).to.be.undefined()
+      const tablist = tabs.findBy({ context: 'ulist' })[0]
+      expect(tablist).to.exist()
+      expect(tablist.getItems()).to.have.lengthOf(4)
+      const codeBlocks = tabs.findBy({ context: 'listing' })
+      expect(codeBlocks).to.have.lengthOf(4)
+      const actualProperties = codeBlocks.map((block) => {
+        return { style: block.getStyle(), language: block.getAttributes().language, title: block.getTitle(), someAttribute: block.getAttribute('some-attribute') }
+      })
+      console.log(actualProperties)
       expect(actualProperties).to.eql(expected)
     })
 
