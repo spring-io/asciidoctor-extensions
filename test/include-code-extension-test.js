@@ -307,6 +307,7 @@ describe('include-code-extension', () => {
       include-code::hello[sync-group-id=thisisauniqueid]
       `
       const actual = run(input, { registerAsciidoctorTabs: true })
+      console.log(actual.convert())
       expect(actual.convert()).to.contain(
         'class="openblock tabs is-sync data-sync-group-id=thisisauniqueid is-loading"'
       )
