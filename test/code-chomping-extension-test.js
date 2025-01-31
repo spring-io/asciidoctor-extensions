@@ -127,7 +127,7 @@ describe('code-chomping-extension', () => {
        * Copyright 2000-present ACME Corp. Free the source!
        */
 
-      package org.example
+      package org.example.\`object\`
 
       public class Example {}
       `
