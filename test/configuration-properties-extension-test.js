@@ -666,6 +666,26 @@ describe('configuration-properties-extension', () => {
         expect(propertiesBlock.getSourceLines()).to.eql(expected)
       })
 
+      it('should convert multi-line property in configprops,yaml block to properties', () => {
+        addConfigurationMetadataFixture()
+        const input = heredoc`
+        [configprops,yaml]
+        ----
+        foo:
+          bar:
+            baz: |
+              one
+              two
+              three
+        ----
+        `
+        expect(messages).to.be.empty()
+        const actual = run(input)
+        const propertiesBlock = actual.findBy({ context: 'listing' })[0]
+        const expected = ['foo.bar.baz=\\', 'one\\n\\', 'two\\n\\', 'three\\n']
+        expect(propertiesBlock.getSourceLines()).to.eql(expected)
+      })
+
       it('should only warn once if invalid property is used in multiple documents in configprops,yaml block', () => {
         const input = heredoc`
         [configprops,yaml]
