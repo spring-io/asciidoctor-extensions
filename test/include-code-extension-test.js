@@ -507,7 +507,12 @@ describe('include-code-extension', () => {
       const codeBlocks = tabs.findBy({ context: 'listing' })
       expect(codeBlocks).to.have.lengthOf(4)
       const actualProperties = codeBlocks.map((block) => {
-        return { style: block.getStyle(), language: block.getAttributes().language, title: block.getTitle(), someAttribute: block.getAttribute('some-attribute') }
+        return {
+          style: block.getStyle(),
+          language: block.getAttributes().language,
+          title: block.getTitle(),
+          someAttribute: block.getAttribute('some-attribute'),
+        }
       })
       console.log(actualProperties)
       expect(actualProperties).to.eql(expected)
