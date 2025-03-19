@@ -1,6 +1,6 @@
 {
   "name": "@springio/asciidoctor-extensions",
-  "version": "1.0.0-alpha.16",
+  "version": "1.0.0-alpha.17",
   "description": "Asciidoctor.js extensions that support the Spring documentation.",
   "license": "ASL-2.0",
   "author": "OpenDevise Inc. (https://opendevise.com)",
