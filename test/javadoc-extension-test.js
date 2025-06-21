@@ -295,7 +295,7 @@ describe('javadoc-extension', () => {
       `
       const actual = run(input)
       expect(actual).to.include(
-        '<a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.html#run(java.lang.Class,java.lang.String&#8230;&#8203;)" class="xref page apiref"><code>MyClass.run(Class, String&#8230;&#8203;)</code></a>'
+        '<a href="https://docs.example.com/_attachments/api/java/com/example/MyClass.html#run(java.lang.Class,java.lang.String...)" class="xref page apiref"><code>MyClass.run(Class, String...)</code></a>'
       )
     })
 
