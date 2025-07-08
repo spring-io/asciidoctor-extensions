@@ -682,7 +682,7 @@ describe('configuration-properties-extension', () => {
         expect(messages).to.be.empty()
         const actual = run(input)
         const propertiesBlock = actual.findBy({ context: 'listing' })[0]
-        const expected = ['foo.bar.baz=\\', 'one\\n\\', 'two\\n\\', 'three\\n']
+        const expected = ['foo.bar.baz=\\', 'one\\n\\', 'two\\n\\', 'three']
         expect(propertiesBlock.getSourceLines()).to.eql(expected)
       })
 
