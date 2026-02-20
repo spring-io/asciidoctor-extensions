@@ -81,7 +81,7 @@ describe('include-code-extension', () => {
   beforeEach(() => {
     contentCatalog = createContentCatalog()
     messages = []
-    configureLogger({ destination: { write: (messageString) => messages.push(messageString) } })
+    configureLogger({ destination: { write: (messageString) => messages.push(JSON.parse(messageString)) } })
   })
 
   describe('bootstrap', () => {
@@ -123,7 +123,7 @@ describe('include-code-extension', () => {
       const input = 'include-code::hello[]'
       run(input, { attributes: {} })
       expect(messages).to.have.lengthOf(1)
-      const message = JSON.parse(messages[0])
+      const message = messages[0]
       expect(message.level).to.equal('warn')
       expect(message.msg).to.equal(expectedMessage)
       expect(message).to.have.nested.property('file.line', expectedLineno)
@@ -246,10 +246,13 @@ describe('include-code-extension', () => {
       `
       const actual = run(input, { attributes: { 'include-kotlin': 'example$kotlin' }, sourcemap: true })
       expect(actual.getBlocks()[1].getTitle()).to.include('unresolved')
-      expect(messages).to.have.lengthOf(1)
-      const message = JSON.parse(messages[0])
-      expect(message.msg).to.equal('target of xref not found: no-such-file.adoc')
-      expect(message.file.line).to.equal(4)
+      const errors = messages.filter((m) => {
+        return m.level === 'error'
+      })
+      expect(errors).to.have.lengthOf(1)
+      const error = errors[0]
+      expect(error.msg).to.equal('target of xref not found: no-such-file.adoc')
+      expect(error.file.line).to.equal(4)
     })
 
     it('should support title attribute on block macro with multiple includes', () => {
@@ -412,8 +415,7 @@ describe('include-code-extension', () => {
       expect(actual.getBlocks()).to.have.lengthOf(3)
       expect(actual.getBlocks()[1].getSource()).to.equal(expectedSource)
       expect(actual.getBlocks()[1].getAttributes()).to.include(expectedAttrs)
-      expect(messages).to.have.lengthOf(1)
-      const message = JSON.parse(messages[0])
+      const message = messages[0]
       expect(message.level).to.equal('warn')
       expect(message.msg).to.equal(expectedMessage)
       expect(message).to.have.nested.property('file.path', 'kotlin/hello.kt')
@@ -497,7 +499,6 @@ describe('include-code-extension', () => {
       include-code::hello[]`
       const doc = run(input, { registerAsciidoctorTabs: true })
       const tabs = doc.getBlocks()[0]
-      console.log(tabs)
       expect(tabs).to.exist()
       expect(tabs.hasRole('tabs')).to.be.true()
       expect(tabs.getTitle()).to.be.undefined()
@@ -514,7 +515,6 @@ describe('include-code-extension', () => {
           someAttribute: block.getAttribute('some-attribute'),
         }
       })
-      console.log(actualProperties)
       expect(actualProperties).to.eql(expected)
     })
 
@@ -622,14 +622,37 @@ describe('include-code-extension', () => {
       expect(actual.getBlocks()[0].getAttributes().language).to.equal('kotlin')
     })
 
+    it('should log at info level with paths checked when resources are found', () => {
+      addExample(
+        'java/hello.java',
+        heredoc`
+        public class Hello {
+          public static void main (String[] args) {
+            System.out.println("Hello, World!");
+          }
+        }
+        `
+      )
+      addExample('kotlin/hello.kt', 'println("Hello")')
+      const input = 'include-code::hello[]'
+      run(input, {})
+      expect(messages).to.have.lengthOf(1)
+      const message = messages[0]
+      expect(message.level).to.equal('info')
+      expect(messages[0].msg).to.equal(
+        'Checked the resources {ref: example$java/hello.java, exists: true},{ref: example$kotlin/hello.kt, exists: true},{ref: example$groovy/hello.groovy, exists: false},{ref: example$xml/hello.xml, exists: false} for target hello'
+      )
+    })
+
     it('should warn if at least one include-<lang> attribute is set but no resources are found', () => {
-      const expectedMessage = 'no code includes found for hello'
+      const expectedMessage =
+        'no code includes found for hello. Checked {ref: example$java/hello.java, exists: false},{ref: example$kotlin/hello.kt, exists: false},{ref: example$groovy/hello.groovy, exists: false},{ref: example$xml/hello.xml, exists: false}'
       const expectedLineno = 1
       const input = 'include-code::hello[]'
       const actual = run(input)
       expect(actual.getBlocks()).to.be.empty()
       expect(messages).to.have.lengthOf(1)
-      const message = JSON.parse(messages[0])
+      const message = messages[0]
       expect(message.level).to.equal('warn')
       expect(message.msg).to.equal(expectedMessage)
       expect(message).to.have.nested.property('file.line', expectedLineno)
@@ -646,7 +669,7 @@ describe('include-code-extension', () => {
       `
       run(input)
       expect(messages).to.have.lengthOf(1)
-      const message = JSON.parse(messages[0])
+      const message = messages[0]
       expect(message.level).to.equal('warn')
       expect(message).to.have.nested.property('file.line', expectedLineno)
     })
