@@ -27,7 +27,7 @@ describe('extensions', () => {
     getComponent: () => undefined,
     resolveResource (ref, context, defaultFamily, permittedFamilies) {
       const [family, relative] = ref.split('$')
-      if (!permittedFamilies.includes(family)) return
+      if (permittedFamilies && !permittedFamilies.includes(family)) return
       return this.getById(Object.assign({}, context, { family, relative }))
     },
   })
