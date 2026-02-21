@@ -19,7 +19,7 @@
   },
   "scripts": {
     "coverage": "nyc _mocha",
-    "coverage-strict": "nyc --branches=100 --lines=100 _mocha",
+    "coverage-strict": "nyc --concurrency=1 --branches=100 --lines=100 _mocha",
     "build": "npm test && npm run lint",
     "format": "node npm/format.js lib,test,npm",
     "lint": "eslint \"{lib,test,npm}/**/*.js\"",
@@ -70,13 +70,14 @@
     "eslint": "~8.30",
     "eslint-config-standard": "~17.1",
     "mocha": "~11.7",
-    "nyc": "~15.1",
+    "nyc": "~17.1",
     "prettier-eslint": "~15.0"
   },
   "nyc": {
     "all": true,
     "cacheDir": "node_modules/.cache/nyc",
     "checkCoverage": true,
+    "concurrency": 1,
     "include": [
       "lib/*.js"
     ],
