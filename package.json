@@ -70,7 +70,7 @@
     "eslint": "~8.30",
     "eslint-config-standard": "~17.1",
     "mocha": "~11.7",
-    "nyc": "~17.1",
+    "nyc": "~18.0",
     "prettier-eslint": "~15.0"
   },
   "nyc": {
