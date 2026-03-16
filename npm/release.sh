@@ -5,13 +5,6 @@
 if [ ! -v RELEASE_USER ]; then
   export RELEASE_USER=$GITHUB_ACTOR
 fi
-#if [ ! -v RELEASE_NPM_TOKEN ]; then
-#  declare -n RELEASE_NPM_TOKEN="RELEASE_NPM_TOKEN_$RELEASE_USER"
-#fi
-if [ -z "$RELEASE_NPM_TOKEN" ]; then
-  echo No npm token specified for publishing to npmjs.com. Stopping release.
-  exit 1
-fi
 export RELEASE_BRANCH=${GITHUB_REF_NAME:-main}
 RELEASE_GIT_NAME=$(curl -s https://api.github.com/users/$RELEASE_USER | jq -r .name)
 RELEASE_GIT_EMAIL=$RELEASE_USER@users.noreply.github.com
@@ -34,9 +27,6 @@ fi
 git config --local user.name "$RELEASE_GIT_NAME"
 git config --local user.email "$RELEASE_GIT_EMAIL"
 
-# configure npm client for publishing
-echo -e "//registry.npmjs.org/:_authToken=$RELEASE_NPM_TOKEN" > $HOME/.npmrc
-
 # release!
 (
   set -e
@@ -53,9 +43,6 @@ echo -e "//registry.npmjs.org/:_authToken=$RELEASE_NPM_TOKEN" > $HOME/.npmrc
 )
 
 exit_code=$?
-
-# nuke npm settings
-rm -f $HOME/.npmrc
 
 # check for any uncommitted files
 git status -s -b
