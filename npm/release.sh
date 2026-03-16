@@ -38,7 +38,6 @@ git config --local user.email "$RELEASE_GIT_EMAIL"
   git commit -a -m "release $RELEASE_VERSION [no ci]"
   git tag -m "version $RELEASE_VERSION" v$RELEASE_VERSION
   git push origin $(git describe --tags --exact-match)
-  # npm whoami
   npm publish --provenance --access public --tag $RELEASE_NPM_TAG
   git push origin $RELEASE_BRANCH
 )
